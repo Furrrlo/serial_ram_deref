@@ -63,7 +63,7 @@ architecture Behavioral of project_reti_logiche is
     signal ex_load : std_logic;
     signal data_load : std_logic;
     
-    type S is (S0, S1, S2, S3, S4, S5, S6, S7, S8, S9, S10, S11, S12, S13, S14, S15, S16, S17, S18);
+    type S is (S0, S1, S2, S3, S4, S5, S6. s7);
     signal curr_state, next_state : S;
 begin
     DATAPATH0: datapath port map(
@@ -100,23 +100,25 @@ begin
                     next_state <= S1;
                 end if;
             when S1 => next_state <= S2;
-            when S2 => next_state <= S3;
-            when S3 => next_state <= S4;
-            when S4 => next_state <= S5;
-            when S5 => next_state <= S6;
+            when S2 =>
+                if i_start = '1' then
+                    next_state <= S3;
+                else -- if i_start = '0' then
+                    next_state <= S4;
+                end if;
+            when S3 => next_state <= S6;
+            when S4 =>
+                if i_start = '1' then
+                    next_state <= S5;
+                else -- if i_start = '0' then
+                    next_state <= S6;
+                end if;
+            when S5 =>
+                if i_start = '0' then
+                    next_state <= S6;
+                end if;
             when S6 => next_state <= S7;
-            when S7 => next_state <= S8;
-            when S8 => next_state <= S9;
-            when S9 => next_state <= S10;
-            when S10 => next_state <= S11;
-            when S11 => next_state <= S12;
-            when S12 => next_state <= S13;
-            when S13 => next_state <= S14;
-            when S14 => next_state <= S15;
-            when S15 => next_state <= S16;
-            when S16 => next_state <= S17;
-            when S17 => next_state <= S18;
-            when S18 => next_state <= S0;
+            when S7 => next_state <= S0;
         end case;
     end process;
     
@@ -130,30 +132,19 @@ begin
         data_load <= '0';
         
         case curr_state is
-            when S0 => ex_shift <= '1';
+            when S0 =>
             when S1 => ex_shift <= '1';
-            when S2 =>
-                ex_load <= '1'; 
-                addr_shift <= '1';
-            when S3 => addr_shift <= '1';
-            when S4 => addr_shift <= '1';
-            when S5 => addr_shift <= '1';
-            when S6 => addr_shift <= '1';
-            when S7 => addr_shift <= '1';
-            when S8 => addr_shift <= '1';
-            when S9 => addr_shift <= '1';
-            when S10 => addr_shift <= '1';
-            when S11 => addr_shift <= '1';
-            when S12 => addr_shift <= '1';
-            when S13 => addr_shift <= '1';
-            when S14 => addr_shift <= '1';
-            when S15 => addr_shift <= '1';
-            when S16 => addr_shift <= '1';
-            when S17 => 
-                addr_shift <= '1';
+            when S2 => ex_shift <= '1';
+            when S3 => ex_load <= '1';
+            when S4 => 
+				ex_load <= '1';
+				addr_shift <= '1';
+            when S5 => 
+				addr_shift <= '1';
+            when S6 => 
                 o_mem_en <= '1';
                 data_load <= '1';
-            when S18 => o_done <= '1';
+            when S7 => o_done <= '1';
         end case;
     end process;
 end Behavioral;
@@ -202,15 +193,11 @@ architecture Behavioral of datapath is
     signal data_reg : std_logic_vector(7 downto 0);
 begin
     -- serial to parallel address
-    with i_start select
-        addr_w <= i_w when '1',
-                  '0' when '0',
-                  'X' when others;
-    
     addr_clk <= i_clk and addr_shift;
     
     SERIAL_TO_PARALLEL_ADDR: serial_to_parallel_16 port map(
         i_clk => addr_clk,
+        i_rst => i_rst,
         i_s => addr_w,
         o_p => o_mem_addr);
         
@@ -268,6 +255,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity serial_to_parallel_16 is
     port (
         i_clk : in std_logic;
+        i_rst : in std_logic;
         i_s : in std_logic;
         o_p : out std_logic_vector(15 downto 0));
 end serial_to_parallel_16;
@@ -292,23 +280,40 @@ architecture Behavioral of serial_to_parallel_16 is
 begin
     process (i_clk, i_s) is
     begin
-        if (i_clk='1' and i_clk'event) then
-            q15 <= i_s;
-            q14 <= q15;
-            q13 <= q14;
-            q12 <= q13;
-            q11 <= q12;
-            q10 <= q11;
-            q9 <= q10;
-            q8 <= q9;
-            q7 <= q8;
-            q6 <= q7;
-            q5 <= q6;
-            q4 <= q5;
-            q3 <= q4;
-            q2 <= q3;
-            q1 <= q2;
-            q0 <= q1;
+        if(i_rst = '1') then
+            q15 <= '0';
+            q14 <= '0';
+            q13 <= '0';
+            q12 <= '0';
+            q11 <= '0';
+            q10 <= '0';
+            q9 <= '0';
+            q8 <= '0';
+            q7 <= '0';
+            q6 <= '0';
+            q5 <= '0';
+            q4 <= '0';
+            q3 <= '0';
+            q2 <= '0';
+            q1 <= '0';
+            q0 <= '0';
+        elsif (i_clk='1' and i_clk'event) then
+            q0 <= i_s;
+            q1 <= q0;
+            q2 <= q1;
+            q3 <= q2;
+            q4 <= q3;
+            q5 <= q4;
+            q6 <= q5;
+            q7 <= q6;
+            q8 <= q7;
+            q9 <= q8;
+            q10 <= q9;
+            q11 <= q10;
+            q12 <= q11;
+            q13 <= q12;
+            q14 <= q13;
+            q15 <= q14;
         end if;
     end process;
 
@@ -332,8 +337,8 @@ begin
     process (i_clk, i_s) is
     begin
         if (i_clk='1' and i_clk'event) then
-            q1 <= i_s;
-            q0 <= q1;
+            q0 <= i_s;
+            q1 <= q0;
         end if;
     end process;
 
