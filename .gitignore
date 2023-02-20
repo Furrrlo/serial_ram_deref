@@ -7,4 +7,5 @@ serial_to_parallel_ram_dereference.sim
 # Python venv stuff
 
 venv
+vunit-tests-generated
 vunit_out

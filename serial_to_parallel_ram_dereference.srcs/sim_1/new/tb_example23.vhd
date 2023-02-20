@@ -1,6 +1,9 @@
 
 -- TB EXAMPLE PFRL 2022-2023
 
+--VUNIT%% library vunit_lib; %%--
+--VUNIT%% context vunit_lib.vunit_context; %%--
+
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
@@ -8,6 +11,7 @@ USE ieee.std_logic_unsigned.ALL;
 USE std.textio.ALL;
 
 ENTITY project_tb IS
+    --VUNIT%% generic (runner_cfg : string := runner_cfg_default); %%--
 END project_tb;
 
 ARCHITECTURE projecttb OF project_tb IS
@@ -38,7 +42,7 @@ ARCHITECTURE projecttb OF project_tb IS
                                 6 => STD_LOGIC_VECTOR(to_unsigned(88, 8)),
                                 OTHERS => "00000000"-- (OTHERS => '0')
                             );
-                    
+
     COMPONENT project_reti_logiche IS
         PORT (
             i_clk : IN STD_LOGIC;
@@ -97,12 +101,12 @@ BEGIN
                     RAM(conv_integer(mem_address)) <= mem_i_data;
                     mem_o_data <= mem_i_data AFTER 1 ns;
                 ELSE
-                    mem_o_data <= RAM(conv_integer(mem_address)) AFTER 1 ns; 
+                    mem_o_data <= RAM(conv_integer(mem_address)) AFTER 1 ns;
                 END IF;
             END IF;
         END IF;
     END PROCESS;
-    
+
     -- This process provides the correct scenario on the signal controlled by the TB
     createScenario : PROCESS (tb_clk)
     BEGIN
@@ -119,31 +123,33 @@ BEGIN
     -- Process without sensitivity list designed to test the actual component.
     testRoutine : PROCESS IS
     BEGIN
+        --VUNIT%% test_runner_setup(runner, runner_cfg); %%--
+
         mem_i_data <= "00000000";
         -- wait for 10000 ns;
         WAIT UNTIL tb_rst = '1';
         WAIT UNTIL tb_rst = '0';
-        ASSERT tb_z0 = "00000000" REPORT "TEST FALLITO (postreset Z0--Z3 != 0 ) found " & integer'image(to_integer(unsigned(tb_z0))) severity failure; 
-        ASSERT tb_z1 = "00000000" REPORT "TEST FALLITO (postreset Z0--Z3 != 0 ) found " & integer'image(to_integer(unsigned(tb_z1))) severity failure; 
-        ASSERT tb_z2 = "00000000" REPORT "TEST FALLITO (postreset Z0--Z3 != 0 ) found " & integer'image(to_integer(unsigned(tb_z2))) severity failure; 
-        ASSERT tb_z3 = "00000000" REPORT "TEST FALLITO (postreset Z0--Z3 != 0 ) found " & integer'image(to_integer(unsigned(tb_z3))) severity failure; 
+        ASSERT tb_z0 = "00000000" REPORT "TEST FALLITO (postreset Z0--Z3 != 0 ) found " & integer'image(to_integer(unsigned(tb_z0))) severity failure;
+        ASSERT tb_z1 = "00000000" REPORT "TEST FALLITO (postreset Z0--Z3 != 0 ) found " & integer'image(to_integer(unsigned(tb_z1))) severity failure;
+        ASSERT tb_z2 = "00000000" REPORT "TEST FALLITO (postreset Z0--Z3 != 0 ) found " & integer'image(to_integer(unsigned(tb_z2))) severity failure;
+        ASSERT tb_z3 = "00000000" REPORT "TEST FALLITO (postreset Z0--Z3 != 0 ) found " & integer'image(to_integer(unsigned(tb_z3))) severity failure;
         WAIT UNTIL tb_start = '1';
-        ASSERT tb_z0 = "00000000" REPORT "TEST FALLITO (poststart Z0--Z3 != 0 ) found " & integer'image(to_integer(unsigned(tb_z0))) severity failure; 
-        ASSERT tb_z1 = "00000000" REPORT "TEST FALLITO (poststart Z0--Z3 != 0 ) found " & integer'image(to_integer(unsigned(tb_z1))) severity failure; 
-        ASSERT tb_z2 = "00000000" REPORT "TEST FALLITO (poststart Z0--Z3 != 0 ) found " & integer'image(to_integer(unsigned(tb_z2))) severity failure; 
-        ASSERT tb_z3 = "00000000" REPORT "TEST FALLITO (poststart Z0--Z3 != 0 ) found " & integer'image(to_integer(unsigned(tb_z3))) severity failure; 
+        ASSERT tb_z0 = "00000000" REPORT "TEST FALLITO (poststart Z0--Z3 != 0 ) found " & integer'image(to_integer(unsigned(tb_z0))) severity failure;
+        ASSERT tb_z1 = "00000000" REPORT "TEST FALLITO (poststart Z0--Z3 != 0 ) found " & integer'image(to_integer(unsigned(tb_z1))) severity failure;
+        ASSERT tb_z2 = "00000000" REPORT "TEST FALLITO (poststart Z0--Z3 != 0 ) found " & integer'image(to_integer(unsigned(tb_z2))) severity failure;
+        ASSERT tb_z3 = "00000000" REPORT "TEST FALLITO (poststart Z0--Z3 != 0 ) found " & integer'image(to_integer(unsigned(tb_z3))) severity failure;
         WAIT UNTIL tb_done = '1';
         --WAIT UNTIL rising_edge(tb_clk);
         WAIT FOR CLOCK_PERIOD/2;
         ASSERT tb_z2 = std_logic_vector(to_unsigned(162, 8))  REPORT "TEST FALLITO (Z2 ---) found " & integer'image(to_integer(unsigned(tb_z2))) severity failure; --. Expected  209  found " & integer'image(tb_z0))))  severity failure;
         WAIT UNTIL tb_done = '0';
-        ASSERT tb_z0 = "00000000" REPORT "TEST FALLITO (postdone Z0--Z3 != 0 ) found " & integer'image(to_integer(unsigned(tb_z0))) severity failure; 
-        ASSERT tb_z1 = "00000000" REPORT "TEST FALLITO (postdone Z0--Z3 != 0 ) found " & integer'image(to_integer(unsigned(tb_z1))) severity failure; 
-        ASSERT tb_z2 = "00000000" REPORT "TEST FALLITO (postdone Z0--Z3 != 0 ) found " & integer'image(to_integer(unsigned(tb_z2))) severity failure; 
-        ASSERT tb_z3 = "00000000" REPORT "TEST FALLITO (postdone Z0--Z3 != 0 ) found " & integer'image(to_integer(unsigned(tb_z3))) severity failure; 
+        ASSERT tb_z0 = "00000000" REPORT "TEST FALLITO (postdone Z0--Z3 != 0 ) found " & integer'image(to_integer(unsigned(tb_z0))) severity failure;
+        ASSERT tb_z1 = "00000000" REPORT "TEST FALLITO (postdone Z0--Z3 != 0 ) found " & integer'image(to_integer(unsigned(tb_z1))) severity failure;
+        ASSERT tb_z2 = "00000000" REPORT "TEST FALLITO (postdone Z0--Z3 != 0 ) found " & integer'image(to_integer(unsigned(tb_z2))) severity failure;
+        ASSERT tb_z3 = "00000000" REPORT "TEST FALLITO (postdone Z0--Z3 != 0 ) found " & integer'image(to_integer(unsigned(tb_z3))) severity failure;
         WAIT UNTIL tb_start = '1';
         WAIT UNTIL tb_done = '1';
-        
+
         --WAIT UNTIL rising_edge(tb_clk);
         WAIT FOR CLOCK_PERIOD/2;
 
@@ -151,6 +157,8 @@ BEGIN
         ASSERT tb_z2 = std_logic_vector(to_unsigned(162, 8))  REPORT "TEST FALLITO (Z2 ---) found " & integer'image(to_integer(unsigned(tb_z2))) severity failure; --. Expected  209  found " & integer'image(tb_z0))))  severity failure;
 
         ASSERT false REPORT "Simulation Ended! TEST PASSATO (EXAMPLE)" SEVERITY failure;
+
+        --VUNIT%% test_runner_cleanup(runner); %%--
     END PROCESS testRoutine;
 
 END projecttb;
