@@ -1,0 +1,10 @@
+name: Run VUnit tests
+on: [ push, pull_request ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: VUnit/vunit_action@master
+        with:
+          cmd: python3 ./run-vunit.py
