@@ -1,0 +1,10 @@
+# Vivado stuff
+
+serial_to_parallel_ram_dereference.cache
+serial_to_parallel_ram_dereference.runs
+serial_to_parallel_ram_dereference.sim
+
+# Python venv stuff
+
+venv
+vunit_out
