@@ -1,7 +1,0 @@
-Running: xsim.dir/project_reti_logiche_behav/xsimk.exe -simmode gui -wdb project_reti_logiche_behav.wdb -simrunnum 0 -socket 58706
-Design successfully loaded
-Design Loading Memory Usage: 8132 KB (Peak: 8132 KB)
-Design Loading CPU Usage: 46 ms
-Simulation completed
-Simulation Memory Usage: 8596 KB (Peak: 8596 KB)
-Simulation CPU Usage: 62 ms

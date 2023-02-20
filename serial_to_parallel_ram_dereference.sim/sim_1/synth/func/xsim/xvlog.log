@@ -1,6 +1,0 @@
-INFO: [VRFC 10-2263] Analyzing Verilog file "D:/Projects/polimi/serial_to_parallel_ram_dereference/serial_to_parallel_ram_dereference.sim/sim_1/synth/func/xsim/project_tb_func_synth.v" into library xil_defaultlib
-INFO: [VRFC 10-311] analyzing module datapath
-INFO: [VRFC 10-311] analyzing module project_reti_logiche
-INFO: [VRFC 10-311] analyzing module serial_to_parallel_16
-INFO: [VRFC 10-311] analyzing module serial_to_parallel_2
-INFO: [VRFC 10-311] analyzing module glbl

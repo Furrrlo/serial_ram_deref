@@ -1,6 +1,0 @@
-# compile vhdl design source files
-vhdl xil_defaultlib  \
-"../../../../../serial_to_parallel_ram_dereference.srcs/sim_1/new/tb_example23.vhd" \
-
-# Do not sort compile order
-nosort

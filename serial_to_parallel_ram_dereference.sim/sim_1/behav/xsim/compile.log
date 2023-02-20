@@ -1,5 +1,0 @@
-INFO: [VRFC 10-163] Analyzing VHDL file "D:/Projects/polimi/serial_to_parallel_ram_dereference/serial_to_parallel_ram_dereference.srcs/sources_1/new/main.vhd" into library xil_defaultlib
-INFO: [VRFC 10-3107] analyzing entity 'project_reti_logiche'
-INFO: [VRFC 10-3107] analyzing entity 'datapath'
-INFO: [VRFC 10-3107] analyzing entity 'serial_to_parallel_16'
-INFO: [VRFC 10-3107] analyzing entity 'serial_to_parallel_2'
