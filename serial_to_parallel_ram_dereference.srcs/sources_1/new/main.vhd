@@ -201,7 +201,7 @@ begin
     SERIAL_TO_PARALLEL_ADDR: serial_to_parallel_16 port map(
         i_clk => addr_clk,
         i_rst => i_rst,
-        i_s => addr_w,
+        i_s => i_w,
         o_p => o_mem_addr);
         
     -- serial to parallel exit
