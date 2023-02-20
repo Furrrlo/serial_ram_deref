@@ -103,7 +103,7 @@ begin
             when S2 =>
                 if i_start = '0' then
                     next_state <= S3;
-                else -- if i_start = '0' then
+                else -- if i_start = '1' then
                     next_state <= S4;
                 end if;
             when S3 => next_state <= S6;
