@@ -63,7 +63,7 @@ architecture Behavioral of project_reti_logiche is
     signal ex_load : std_logic;
     signal data_load : std_logic;
     
-    type S is (S0, S1, S2, S3, S4, S5, S6, S7);
+    type S is (S0, S1, S2, S3, S4, S5, S6, S7, S8);
     signal curr_state, next_state : S;
 begin
     DATAPATH0: datapath port map(
@@ -86,7 +86,7 @@ begin
     begin
         if(i_rst = '1') then
             curr_state <= S0;
-        elsif i_clk'event and i_clk = '1' then
+        elsif (i_clk'event and i_clk = '1') then
             curr_state <= next_state;
         end if;
     end process;
@@ -101,7 +101,7 @@ begin
                 end if;
             when S1 => next_state <= S2;
             when S2 =>
-                if i_start = '1' then
+                if i_start = '0' then
                     next_state <= S3;
                 else -- if i_start = '0' then
                     next_state <= S4;
@@ -118,7 +118,8 @@ begin
                     next_state <= S6;
                 end if;
             when S6 => next_state <= S7;
-            when S7 => next_state <= S0;
+            when S7 => next_state <= S8;
+            when S8 => next_state <= S0;
         end case;
     end process;
     
@@ -143,8 +144,9 @@ begin
 				addr_shift <= '1';
             when S6 => 
                 o_mem_en <= '1';
+            when S7 => 
                 data_load <= '1';
-            when S7 => o_done <= '1';
+            when S8 => o_done <= '1';
         end case;
     end process;
 end Behavioral;
