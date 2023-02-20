@@ -63,7 +63,7 @@ architecture Behavioral of project_reti_logiche is
     signal ex_load : std_logic;
     signal data_load : std_logic;
     
-    type S is (S0, S1, S2, S3, S4, S5, S6. s7);
+    type S is (S0, S1, S2, S3, S4, S5, S6, S7);
     signal curr_state, next_state : S;
 begin
     DATAPATH0: datapath port map(
@@ -174,6 +174,7 @@ architecture Behavioral of datapath is
     component serial_to_parallel_16 is
         port (
             i_clk : in std_logic;
+            i_rst : in std_logic;
             i_s : in std_logic;
             o_p : out std_logic_vector(15 downto 0));
     end component;
