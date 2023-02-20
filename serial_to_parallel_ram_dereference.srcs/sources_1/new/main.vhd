@@ -177,6 +177,7 @@ architecture Behavioral of datapath is
         port (
             i_clk : in std_logic;
             i_rst : in std_logic;
+            i_en : in std_logic;
             i_s : in std_logic;
             o_p : out std_logic_vector(15 downto 0));
     end component;
@@ -184,32 +185,37 @@ architecture Behavioral of datapath is
     component serial_to_parallel_2 is
         port (
             i_clk : in std_logic;
+            i_en : in std_logic;
             i_s : in std_logic;
             o_p : out std_logic_vector(1 downto 0));
     end component;
     
-    signal addr_w : std_logic;
-    signal addr_clk : std_logic;
-    signal ex_clk : std_logic;
+    signal w1 : std_logic;
     signal ex_curr : std_logic_vector(1 downto 0);
     signal ex_reg : std_logic_vector(1 downto 0);
     signal data_reg : std_logic_vector(7 downto 0);
 begin
+    -- Delay w by 1 clock cycle, so it can be properly be read
+    process(i_clk, i_w)
+    begin
+        if i_clk'event and i_clk = '1' then
+            w1 <= i_w;
+        end if;
+    end process;
+
     -- serial to parallel address
-    addr_clk <= i_clk and addr_shift;
-    
     SERIAL_TO_PARALLEL_ADDR: serial_to_parallel_16 port map(
-        i_clk => addr_clk,
+        i_clk => i_clk,
         i_rst => i_rst,
-        i_s => i_w,
+        i_en => addr_shift,
+        i_s => w1,
         o_p => o_mem_addr);
         
     -- serial to parallel exit
-    ex_clk <= i_clk and ex_shift;
-    
     SERIAL_TO_PARALLEL_EXIT: serial_to_parallel_2 port map(
-        i_clk => ex_clk,
-        i_s => i_w,
+        i_clk => i_clk,
+        i_en => ex_shift,
+        i_s => w1,
         o_p => ex_curr);
        
     process(i_rst, i_clk, ex_load)
@@ -259,6 +265,7 @@ entity serial_to_parallel_16 is
     port (
         i_clk : in std_logic;
         i_rst : in std_logic;
+        i_en : in std_logic;
         i_s : in std_logic;
         o_p : out std_logic_vector(15 downto 0));
 end serial_to_parallel_16;
@@ -281,7 +288,7 @@ architecture Behavioral of serial_to_parallel_16 is
     signal q14: STD_LOGIC;
     signal q15: STD_LOGIC;
 begin
-    process (i_clk, i_rst, i_s) is
+    process (i_clk, i_rst, i_en, i_s) is
     begin
         if(i_rst = '1') then
             q15 <= '0';
@@ -300,7 +307,7 @@ begin
             q2 <= '0';
             q1 <= '0';
             q0 <= '0';
-        elsif (i_clk='1' and i_clk'event) then
+        elsif (i_clk='1' and i_clk'event and i_en = '1') then
             q0 <= i_s;
             q1 <= q0;
             q2 <= q1;
@@ -329,6 +336,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity serial_to_parallel_2 is
     port (
         i_clk : in std_logic;
+        i_en : in std_logic;
         i_s : in std_logic;
         o_p : out std_logic_vector(1 downto 0));
 end serial_to_parallel_2;
@@ -337,9 +345,9 @@ architecture Behavioral of serial_to_parallel_2 is
     signal q0 : STD_LOGIC;
     signal q1 : STD_LOGIC;
 begin
-    process (i_clk, i_s) is
+    process (i_clk, i_en, i_s) is
     begin
-        if (i_clk='1' and i_clk'event) then
+        if (i_clk='1' and i_clk'event and i_en = '1') then
             q0 <= i_s;
             q1 <= q0;
         end if;
