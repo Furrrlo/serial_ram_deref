@@ -1,10 +1,19 @@
-name: Run VUnit tests
+name: 'VUnit Tests'
 on: [ push, pull_request ]
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: read
+      checks: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@v3
       - uses: VUnit/vunit_action@master
         with:
-          cmd: python3 ./run-vunit.py
+          cmd: python3 ./run-vunit.py --xunit-xml tests_vunit.xml
+      - uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: tests_vunit.xml
