@@ -281,7 +281,7 @@ architecture Behavioral of serial_to_parallel_16 is
     signal q14: STD_LOGIC;
     signal q15: STD_LOGIC;
 begin
-    process (i_clk, i_s) is
+    process (i_clk, i_rst, i_s) is
     begin
         if(i_rst = '1') then
             q15 <= '0';
