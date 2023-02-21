@@ -55,13 +55,15 @@ architecture Behavioral of project_reti_logiche is
             addr_shift : std_logic;
             ex_shift : std_logic;
             ex_load : std_logic;
-            data_load : std_logic);
+            data_load : std_logic;
+            o_done : std_logic);
     end component;
     
     signal addr_shift : std_logic;
     signal ex_shift : std_logic;
     signal ex_load : std_logic;
     signal data_load : std_logic;
+    signal s_done : std_logic;
     
     type S is (S0, S1, S2, S3, S4, S5, S6, S7, S8);
     signal curr_state, next_state : S;
@@ -80,7 +82,8 @@ begin
         addr_shift => addr_shift, 
         ex_shift => ex_shift, 
         ex_load => ex_load, 
-        data_load => data_load);
+        data_load => data_load,
+        o_done => s_done);
 
     process(i_clk, i_rst)
     begin
@@ -127,6 +130,7 @@ begin
     begin
         o_mem_en <= '0';
         o_done <= '0';
+        s_done <= '0';
         addr_shift <= '0';
         ex_shift <= '0';
         ex_load <= '0';
@@ -147,6 +151,7 @@ begin
             when S7 => 
                 data_load <= '1';
             when S8 => o_done <= '1';
+                       s_done <= '1';
         end case;
     end process;
 end Behavioral;
@@ -169,7 +174,8 @@ entity datapath is
         addr_shift : std_logic;
         ex_shift : std_logic;
         ex_load : std_logic;
-        data_load : std_logic);
+        data_load : std_logic;
+        o_done : std_logic);
 end datapath;
 
 architecture Behavioral of datapath is
@@ -190,10 +196,21 @@ architecture Behavioral of datapath is
             o_p : out std_logic_vector(1 downto 0));
     end component;
     
+    component out_reg is
+        port (
+            i_clk : in std_logic;
+            i_rst : in std_logic;
+            reg_load : in std_logic;
+            i_mem_data : in std_logic_vector(7 downto 0);
+            o_done : in std_logic;
+            o_data : out std_logic_vector(7 downto 0));
+    end component;
+    
     signal w1 : std_logic;
     signal ex_curr : std_logic_vector(1 downto 0);
     signal ex_reg : std_logic_vector(1 downto 0);
-    signal data_reg : std_logic_vector(7 downto 0);
+    signal z0_reg_load, z1_reg_load, z2_reg_load, z3_reg_load : std_logic;
+    signal rst_serializer : std_logic;
 begin
     -- Delay w by 1 clock cycle, so it can be properly be read
     process(i_clk, i_w)
@@ -204,9 +221,10 @@ begin
     end process;
 
     -- serial to parallel address
+    rst_serializer <= i_rst or o_done;
     SERIAL_TO_PARALLEL_ADDR: serial_to_parallel_16 port map(
         i_clk => i_clk,
-        i_rst => i_rst,
+        i_rst => rst_serializer,
         i_en => addr_shift,
         i_s => w1,
         o_p => o_mem_addr);
@@ -229,33 +247,75 @@ begin
         end if;
     end process;
     
-    -- Output
-    process(i_rst, i_clk, data_load)
+    process(ex_reg)
     begin
-        if(i_rst = '1') then
-            data_reg <= "00000000";
-        elsif i_clk'event and i_clk = '1' then
-            if data_load = '1' then
-                data_reg <= i_mem_data;
-            end if;
-        end if;
+        report std_logic'image(ex_reg(1))&std_logic'image(ex_reg(0));
     end process;
     
-    process(data_reg, ex_reg)
-    begin
-        o_z0 <= "00000000";
-        o_z1 <= "00000000";
-        o_z2 <= "00000000";
-        o_z3 <= "00000000";
+    z0_reg_load <= data_load and not ex_reg(1) and not ex_reg(0);
+    ZO_REG: out_reg port map(
+            i_clk => i_clk,
+            i_rst => i_rst,
+            reg_load => z0_reg_load,
+            i_mem_data => i_mem_data,
+            o_done => o_done,
+            o_data => o_z0);    
+            
+    z1_reg_load <= data_load and not ex_reg(1) and ex_reg(0);
+    Z1_REG: out_reg port map(
+            i_clk => i_clk,
+            i_rst => i_rst,
+            reg_load => z1_reg_load,
+            i_mem_data => i_mem_data,
+            o_done => o_done,
+            o_data => o_z1);    
+            
+    z2_reg_load <= data_load and ex_reg(1) and not ex_reg(0);
+    Z2_REG: out_reg port map(
+            i_clk => i_clk,
+            i_rst => i_rst,
+            reg_load => z2_reg_load,
+            i_mem_data => i_mem_data,
+            o_done => o_done,
+            o_data => o_z2);    
+            
+    z3_reg_load <= data_load and ex_reg(1) and ex_reg(0);
+    Z3_REG: out_reg port map(
+            i_clk => i_clk,
+            i_rst => i_rst,
+            reg_load => z3_reg_load,
+            i_mem_data => i_mem_data,
+            o_done => o_done,
+            o_data => o_z3);
         
-        case ex_reg is
-            when "00" => o_z0 <= data_reg;
-            when "01" => o_z1 <= data_reg;
-            when "10" => o_z2 <= data_reg;
-            when "11" => o_z3 <= data_reg;
-            when others =>
-        end case;
-    end process;
+    
+--    -- Output
+--    process(i_rst, i_clk, data_load)
+--    begin
+--        if(i_rst = '1') then
+--            data_reg <= "00000000";
+--        elsif i_clk'event and i_clk = '1' then
+--            if data_load = '1' then
+--                data_reg <= i_mem_data;
+--            end if;
+--        end if;
+--    end process;
+    
+--    process(data_reg, ex_reg)
+--    begin
+--        o_z0 <= "00000000";
+--        o_z1 <= "00000000";
+--        o_z2 <= "00000000";
+--        o_z3 <= "00000000";
+        
+--        case ex_reg is
+--            when "00" => o_z0 <= data_reg;
+--            when "01" => o_z1 <= data_reg;
+--            when "10" => o_z2 <= data_reg;
+--            when "11" => o_z3 <= data_reg;
+--            when others =>
+--        end case;
+--    end process;
 end Behavioral;
 
 library IEEE;
@@ -354,4 +414,48 @@ begin
     end process;
 
     o_p <= (q1, q0);
+end Behavioral;
+
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity out_reg is
+    port (
+        i_clk : in std_logic;
+        i_rst : in std_logic;
+        reg_load : in std_logic;
+        i_mem_data : in std_logic_vector(7 downto 0);
+        o_done : in std_logic;
+        o_data : out std_logic_vector(7 downto 0));
+end out_reg;
+
+architecture Behavioral of out_reg is
+    signal data_reg : STD_LOGIC_VECTOR(7 downto 0);
+begin
+
+    process(i_rst, i_clk, reg_load)
+    begin
+        if(i_rst = '1') then
+            data_reg <= "00000000";
+        elsif (i_clk'event and i_clk = '1') then
+            if reg_load = '1' then
+                data_reg <= i_mem_data;
+            end if;
+        end if;
+    end process;
+    
+    process(reg_load)
+    begin
+        report "REG_LOAD: "&std_logic'image(reg_load);
+    end process;
+    
+    process(o_done)
+    begin
+        report "O_DONE: "&std_logic'image(o_done);
+    end process;
+
+    o_data <= "00000000" when (o_done='0') else
+               data_reg when (o_done='1') else
+               "XXXXXXXX";
 end Behavioral;
