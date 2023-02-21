@@ -126,10 +126,11 @@ begin
         end case;
     end process;
     
+    o_done <= s_done;
     process(curr_state)
     begin
         o_mem_en <= '0';
-        o_done <= '0';
+        --o_done <= '0';
         s_done <= '0';
         addr_shift <= '0';
         ex_shift <= '0';
@@ -150,10 +151,16 @@ begin
                 o_mem_en <= '1';
             when S7 => 
                 data_load <= '1';
-            when S8 => o_done <= '1';
+            when S8 => --o_done <= '1';
                        s_done <= '1';
         end case;
     end process;
+    
+--    process(s_done)
+--    begin
+--        report "s_done: "&std_logic'image(s_done);
+--    end process;
+    
 end Behavioral;
 
 library IEEE;
@@ -247,10 +254,10 @@ begin
         end if;
     end process;
     
-    process(ex_reg)
-    begin
-        report std_logic'image(ex_reg(1))&std_logic'image(ex_reg(0));
-    end process;
+--    process(ex_reg)
+--    begin
+--        report std_logic'image(ex_reg(1))&std_logic'image(ex_reg(0));
+--    end process;
     
     z0_reg_load <= data_load and not ex_reg(1) and not ex_reg(0);
     ZO_REG: out_reg port map(
@@ -288,34 +295,6 @@ begin
             o_done => o_done,
             o_data => o_z3);
         
-    
---    -- Output
---    process(i_rst, i_clk, data_load)
---    begin
---        if(i_rst = '1') then
---            data_reg <= "00000000";
---        elsif i_clk'event and i_clk = '1' then
---            if data_load = '1' then
---                data_reg <= i_mem_data;
---            end if;
---        end if;
---    end process;
-    
---    process(data_reg, ex_reg)
---    begin
---        o_z0 <= "00000000";
---        o_z1 <= "00000000";
---        o_z2 <= "00000000";
---        o_z3 <= "00000000";
-        
---        case ex_reg is
---            when "00" => o_z0 <= data_reg;
---            when "01" => o_z1 <= data_reg;
---            when "10" => o_z2 <= data_reg;
---            when "11" => o_z3 <= data_reg;
---            when others =>
---        end case;
---    end process;
 end Behavioral;
 
 library IEEE;
@@ -445,15 +424,16 @@ begin
         end if;
     end process;
     
-    process(reg_load)
-    begin
-        report "REG_LOAD: "&std_logic'image(reg_load);
-    end process;
+--    process(reg_load)
+--    begin
+--        report "REG_LOAD: "&std_logic'image(reg_load);
+--    end process;
     
-    process(o_done)
-    begin
-        report "O_DONE: "&std_logic'image(o_done);
-    end process;
+--    process(o_done)
+--    begin
+--        report "O_DONE: "&std_logic'image(o_done);
+--    end process;
+    
 
     o_data <= "00000000" when (o_done='0') else
                data_reg when (o_done='1') else
