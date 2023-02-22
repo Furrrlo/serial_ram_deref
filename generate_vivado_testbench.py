@@ -120,7 +120,7 @@ def compose_scenarios_and_assertions(num_of_iterations):
         random_address_binary = decimal_to_binary(random_address).lstrip("0")
         channel = generate_channel()
 
-        if not args.use_example_memory:
+        if not args.use_example_memory and random_address not in mem_data:
             mem_data[random_address] = get_random_mem_value()
         outputs[bits_to_channel_names[channel]] = mem_data[random_address]
 
