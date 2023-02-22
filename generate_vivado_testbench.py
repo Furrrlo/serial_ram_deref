@@ -176,6 +176,9 @@ data = compose_scenarios_and_assertions(args.iterations)
 test_bench_script = f"\
 -- TB EXAMPLE PFRL 2022-2023\n\
 \n\
+--VUNIT%% library vunit_lib; %%-- \n\
+--VUNIT%% context vunit_lib.vunit_context; %%-- \n\
+\n\
 LIBRARY ieee;\n\
 USE ieee.std_logic_1164.ALL;\n\
 USE ieee.numeric_std.ALL;\n\
@@ -183,6 +186,7 @@ USE ieee.std_logic_unsigned.ALL;\n\
 USE std.textio.ALL;\n\
 \n\
 ENTITY {args.testbench_name} IS\n\
+    --VUNIT%% generic(runner_cfg: string := runner_cfg_default); %%-- \n\
 END {args.testbench_name};\n\
 \n\
 ARCHITECTURE projecttb OF {args.testbench_name} IS\n\
@@ -290,6 +294,8 @@ BEGIN\n\
     -- Process without sensitivity list designed to test the actual component.\n\
     testRoutine : PROCESS IS\n\
     BEGIN\n\
+        --VUNIT%% test_runner_setup(runner, runner_cfg); %%-- \n\
+\n\
         mem_i_data <= \"00000000\";\n\
         -- wait for 10000 ns;\n\
         WAIT UNTIL tb_rst = '1';\n\
@@ -300,7 +306,11 @@ BEGIN\n\
         ASSERT tb_z3 = \"00000000\" REPORT \"TEST FALLITO (postreset Z0--Z3 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z3))) severity failure; \n\
         {data['assertions']} \
 \n\
-        ASSERT false REPORT \"Simulation Ended! TEST PASSATO (EXAMPLE)\" SEVERITY failure;\n\
+        --VIVADO-START%% \n\
+        ASSERT false REPORT \"Simulation Ended! TEST PASSATO (EXAMPLE)\" SEVERITY failure; \n\
+        --VIVADO-END%% \n\
+\n\
+        --VUNIT%% test_runner_cleanup(runner); %%-- \n\
     END PROCESS testRoutine;\n\
 \n\
 END projecttb;"
