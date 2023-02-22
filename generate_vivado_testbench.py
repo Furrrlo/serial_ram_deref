@@ -60,7 +60,7 @@ def compose_memory_data(mem_content):
 
 def decimal_to_binary(decimal):
     bit_number = "{0:b}".format(decimal)
-    return "".join(["0" for i in range(2 - len(bit_number))]) + bit_number
+    return "".join(["0" for _ in range(2 - len(bit_number))]) + bit_number
 
 
 def get_random_address():
@@ -78,14 +78,13 @@ def generate_channel():
 
 
 def generate_random_rst_string():
-    return "".join(["0" for i in range(randrange(10))] + ["1" for k in range(randrange(10))] + ["0" for h in range(2,
-                                                                                                                   randrange(
-                                                                                                                       5,
-                                                                                                                       10))])
+    return "".join(["0" for _ in range(randrange(10))] +
+                   ["1" for _ in range(randrange(10))] +
+                   ["0" for _ in range(2, randrange(5, 10))])
 
 
 def generate_bit_string(length, val):
-    return "".join([val for i in range(length)])
+    return "".join([val for _ in range(length)])
 
 
 def compose_scenarios_and_assertions(num_of_iterations):
