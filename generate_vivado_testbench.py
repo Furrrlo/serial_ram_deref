@@ -51,11 +51,11 @@ bits_to_channel_names = {
 }
 
 
-def compose_memory_data(mem_data):
-    ram = ""
-    for key, val in mem_data.items():
-        ram += f'{key} => STD_LOGIC_VECTOR(to_unsigned({val}, 8)),'
-    return ram
+def compose_memory_data(mem_content):
+    ram_decl = []
+    for key, val in mem_content.items():
+        ram_decl.append(f'{key} => STD_LOGIC_VECTOR(to_unsigned({val}, 8)),')
+    return "\n                                ".join(ram_decl) + '\n'
 
 
 def decimal_to_binary(decimal):
@@ -178,7 +178,7 @@ def compose_assertion(outputs):
         WAIT UNTIL tb_done = '1';\n\
         --WAIT UNTIL rising_edge(tb_clk);\n\
         WAIT FOR CLOCK_PERIOD/2;\n\
-        {output_assertion_strings}\n\
+{output_assertion_strings}\n\
         WAIT UNTIL tb_done = '0';\n\
         ASSERT tb_z0 = \"00000000\" REPORT \"TEST FALLITO (postdone Z0--Z3 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z0))) severity failure; \n\
         ASSERT tb_z1 = \"00000000\" REPORT \"TEST FALLITO (postdone Z0--Z3 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z1))) severity failure; \n\
