@@ -44,7 +44,6 @@ architecture Behavioral of project_reti_logiche is
         port (
             i_clk : in std_logic;
             i_rst : in std_logic;
-            i_start : in std_logic;
             i_w : in std_logic;
             o_z0 : out std_logic_vector(7 downto 0);
             o_z1 : out std_logic_vector(7 downto 0);
@@ -52,11 +51,11 @@ architecture Behavioral of project_reti_logiche is
             o_z3 : out std_logic_vector(7 downto 0);
             o_mem_addr : out std_logic_vector(15 downto 0);
             i_mem_data : in std_logic_vector(7 downto 0);
-            addr_shift : std_logic;
-            ex_shift : std_logic;
-            ex_load : std_logic;
-            data_load : std_logic;
-            o_done : std_logic);
+            addr_shift : in std_logic;
+            ex_shift : in std_logic;
+            ex_load : in std_logic;
+            data_load : in std_logic;
+            o_done : in std_logic);
     end component;
     
     signal addr_shift : std_logic;
@@ -69,11 +68,10 @@ architecture Behavioral of project_reti_logiche is
     signal curr_state, next_state : S;
 begin
     o_done <= s_done;
-    
+    o_mem_we <= '0';
     DATAPATH0: datapath port map(
         i_clk => i_clk, 
-        i_rst => i_rst, 
-        i_start => i_start, 
+        i_rst => i_rst,
         i_w => i_w,
         o_z0 => o_z0, 
         o_z1 => o_z1, 
@@ -160,7 +158,6 @@ entity datapath is
     port (
         i_clk : in std_logic;
         i_rst : in std_logic;
-        i_start : in std_logic;
         i_w : in std_logic;
         o_z0 : out std_logic_vector(7 downto 0);
         o_z1 : out std_logic_vector(7 downto 0);
@@ -168,11 +165,11 @@ entity datapath is
         o_z3 : out std_logic_vector(7 downto 0);
         o_mem_addr : out std_logic_vector(15 downto 0);
         i_mem_data : in std_logic_vector(7 downto 0);
-        addr_shift : std_logic;
-        ex_shift : std_logic;
-        ex_load : std_logic;
-        data_load : std_logic;
-        o_done : std_logic);
+        addr_shift : in std_logic;
+        ex_shift : in std_logic;
+        ex_load : in std_logic;
+        data_load : in std_logic;
+        o_done : in std_logic);
 end datapath;
 
 architecture Behavioral of datapath is
@@ -207,7 +204,7 @@ architecture Behavioral of datapath is
     signal ex_curr : std_logic_vector(1 downto 0);
     signal ex_reg : std_logic_vector(1 downto 0);
     signal z0_reg_load, z1_reg_load, z2_reg_load, z3_reg_load : std_logic;
-    signal rst_serializer : std_logic;
+    signal rst_shift_regs : std_logic;
 begin
     -- Delay w by 1 clock cycle, so it can be properly be read
     process(i_clk, i_w)
@@ -218,10 +215,10 @@ begin
     end process;
 
     -- serial to parallel address
-    rst_serializer <= i_rst or o_done;
+    rst_shift_regs <= i_rst or o_done;
     SERIAL_TO_PARALLEL_ADDR: serial_to_parallel_16 port map(
         i_clk => i_clk,
-        i_rst => rst_serializer,
+        i_rst => rst_shift_regs,
         i_en => addr_shift,
         i_s => w1,
         o_p => o_mem_addr);
