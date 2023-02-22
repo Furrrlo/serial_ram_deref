@@ -4,7 +4,7 @@
 Running vunit requires python >3.6 and a simulator runner installed on the PATH
 (I personally use GHDL).
 
-When on Windows, I suggest running everything on WSL2, as installing Windows is 
+When on Windows, I suggest running everything on WSL2, as installing GHDL on Windows is 
 painful.
 
 Installing GHDL (built from source as the version that ships in the package managers
@@ -34,7 +34,9 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 Installing python (and venv but it's optional):
 ```bash
 sudo apt install python3 python3-venv
-python3 --version
+```
+```console
+foo@bar:~$ python3 --version
 Python 3.8.10
 ```
 
