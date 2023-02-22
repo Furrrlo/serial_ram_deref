@@ -47,3 +47,33 @@ Then you can finally run tests
 ```bash
 python3 run-vunit.py
 ```
+
+## Generating additional testbenches
+
+Additional testbenches can be generated using the following script 
+(curtesy of @FraMacca on Telegram, edited to fit our needs):
+
+```console
+foo@bar:~$ python3 generate_vivado_testbench.py -h
+usage: Test bench generator [-h] [-i N] [-z] [-a] [-r] [-m] testbench_name
+
+Generates random tests with a certain number of iterations
+
+positional arguments:
+  testbench_name
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -i N, --iterations N  Sets the number of iterations, random if left
+                        empty.
+  -z, --zeros           If flagged forces a testcase with 0 as address
+                        (start = 2 clock cycles)
+  -a, --full_address    If flagged forces a testcase with 1 as address
+                        (start = 18 clock cycles)
+  -r, --multiple_resets
+                        If flagged forces multiple resets inside the test
+                        bench
+  -m, --use_example_memory
+                        If flagged uses the memory provided in the example
+                        testbench
+```
