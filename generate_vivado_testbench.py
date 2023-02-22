@@ -116,7 +116,7 @@ def compose_scenarios_and_assertions(num_of_iterations):
             random_address = 65535
 
         if i == random_cycle and args.zeros:
-            random_address = "0"
+            random_address = 0
 
         random_address_binary = decimal_to_binary(random_address).lstrip("0")
         channel = generate_channel()
