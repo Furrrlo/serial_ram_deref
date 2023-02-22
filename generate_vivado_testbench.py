@@ -162,27 +162,27 @@ def compose_scenarios_and_assertions(num_of_iterations):
 
 def compose_assertion(outputs):
     output_assertion_strings = f"\
-        ASSERT tb_z0 = std_logic_vector(to_unsigned({outputs['tb_z0']}, 8))  REPORT \"TEST FALLITO (Z2 ---)\" severity failure;\n\
-        ASSERT tb_z1 = std_logic_vector(to_unsigned({outputs['tb_z1']}, 8))  REPORT \"TEST FALLITO (Z2 ---)\" severity failure;\n\
-        ASSERT tb_z2 = std_logic_vector(to_unsigned({outputs['tb_z2']}, 8))  REPORT \"TEST FALLITO (Z2 ---)\" severity failure;\n\
-        ASSERT tb_z3 = std_logic_vector(to_unsigned({outputs['tb_z3']}, 8))  REPORT \"TEST FALLITO (Z2 ---)\" severity failure;\
+        ASSERT tb_z0 = std_logic_vector(to_unsigned({outputs['tb_z0']}, 8))  REPORT \"TEST FALLITO (Z0 ---) found \" & integer'image(to_integer(unsigned(tb_z0))) & \" expected \" & integer'image(to_integer(to_unsigned({outputs['tb_z0']}, 8))) severity failure;\n\
+        ASSERT tb_z1 = std_logic_vector(to_unsigned({outputs['tb_z1']}, 8))  REPORT \"TEST FALLITO (Z1 ---) found \" & integer'image(to_integer(unsigned(tb_z0))) & \" expected \" & integer'image(to_integer(to_unsigned({outputs['tb_z1']}, 8)))  severity failure;\n\
+        ASSERT tb_z2 = std_logic_vector(to_unsigned({outputs['tb_z2']}, 8))  REPORT \"TEST FALLITO (Z2 ---) found \" & integer'image(to_integer(unsigned(tb_z0))) & \" expected \" & integer'image(to_integer(to_unsigned({outputs['tb_z2']}, 8)))  severity failure;\n\
+        ASSERT tb_z3 = std_logic_vector(to_unsigned({outputs['tb_z3']}, 8))  REPORT \"TEST FALLITO (Z3 ---) found \" & integer'image(to_integer(unsigned(tb_z0))) & \" expected \" & integer'image(to_integer(to_unsigned({outputs['tb_z3']}, 8)))  severity failure;\
         "
 
     return f"\n\
         WAIT UNTIL tb_start = '1';\n\
-        ASSERT tb_z0 = \"00000000\" REPORT \"TEST FALLITO (poststart Z0--Z3 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z0))) severity failure; \n\
-        ASSERT tb_z1 = \"00000000\" REPORT \"TEST FALLITO (poststart Z0--Z3 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z1))) severity failure; \n\
-        ASSERT tb_z2 = \"00000000\" REPORT \"TEST FALLITO (poststart Z0--Z3 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z2))) severity failure; \n\
-        ASSERT tb_z3 = \"00000000\" REPORT \"TEST FALLITO (poststart Z0--Z3 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z3))) severity failure; \n\
+        ASSERT tb_z0 = \"00000000\" REPORT \"TEST FALLITO (poststart Z0 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z0))) severity failure; \n\
+        ASSERT tb_z1 = \"00000000\" REPORT \"TEST FALLITO (poststart Z1 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z1))) severity failure; \n\
+        ASSERT tb_z2 = \"00000000\" REPORT \"TEST FALLITO (poststart Z2 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z2))) severity failure; \n\
+        ASSERT tb_z3 = \"00000000\" REPORT \"TEST FALLITO (poststart Z3 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z3))) severity failure; \n\
         WAIT UNTIL tb_done = '1';\n\
         --WAIT UNTIL rising_edge(tb_clk);\n\
         WAIT FOR CLOCK_PERIOD/2;\n\
 {output_assertion_strings}\n\
         WAIT UNTIL tb_done = '0';\n\
-        ASSERT tb_z0 = \"00000000\" REPORT \"TEST FALLITO (postdone Z0--Z3 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z0))) severity failure; \n\
-        ASSERT tb_z1 = \"00000000\" REPORT \"TEST FALLITO (postdone Z0--Z3 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z1))) severity failure; \n\
-        ASSERT tb_z2 = \"00000000\" REPORT \"TEST FALLITO (postdone Z0--Z3 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z2))) severity failure; \n\
-        ASSERT tb_z3 = \"00000000\" REPORT \"TEST FALLITO (postdone Z0--Z3 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z3))) severity failure; \n\
+        ASSERT tb_z0 = \"00000000\" REPORT \"TEST FALLITO (postdone Z0 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z0))) severity failure; \n\
+        ASSERT tb_z1 = \"00000000\" REPORT \"TEST FALLITO (postdone Z1 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z1))) severity failure; \n\
+        ASSERT tb_z2 = \"00000000\" REPORT \"TEST FALLITO (postdone Z2 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z2))) severity failure; \n\
+        ASSERT tb_z3 = \"00000000\" REPORT \"TEST FALLITO (postdone Z3 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z3))) severity failure; \n\
     "
 
 
@@ -325,10 +325,10 @@ BEGIN\n\
         -- wait for 10000 ns;\n\
         WAIT UNTIL tb_rst = '1';\n\
         WAIT UNTIL tb_rst = '0';\n\
-        ASSERT tb_z0 = \"00000000\" REPORT \"TEST FALLITO (postreset Z0--Z3 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z0))) severity failure; \n\
-        ASSERT tb_z1 = \"00000000\" REPORT \"TEST FALLITO (postreset Z0--Z3 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z1))) severity failure; \n\
-        ASSERT tb_z2 = \"00000000\" REPORT \"TEST FALLITO (postreset Z0--Z3 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z2))) severity failure; \n\
-        ASSERT tb_z3 = \"00000000\" REPORT \"TEST FALLITO (postreset Z0--Z3 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z3))) severity failure; \n\
+        ASSERT tb_z0 = \"00000000\" REPORT \"TEST FALLITO (postreset Z0 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z0))) severity failure; \n\
+        ASSERT tb_z1 = \"00000000\" REPORT \"TEST FALLITO (postreset Z1 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z1))) severity failure; \n\
+        ASSERT tb_z2 = \"00000000\" REPORT \"TEST FALLITO (postreset Z2 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z2))) severity failure; \n\
+        ASSERT tb_z3 = \"00000000\" REPORT \"TEST FALLITO (postreset Z3 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z3))) severity failure; \n\
         {data['assertions']} \
 \n\
         tb_passed <= '1';\n\
