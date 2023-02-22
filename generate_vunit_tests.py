@@ -36,7 +36,8 @@ def generate_vunit_tests(curr_dir=Path('.'),
                 flags=re.MULTILINE)
             output_fd.write(output_text)
 
-    shutil.rmtree(target_dir)
+    if target_dir.exists():
+        shutil.rmtree(target_dir)
 
     for child in curr_dir.glob(folder_glob):
         generate_vunit_test(child)
