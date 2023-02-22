@@ -1,5 +1,5 @@
 from vunit import VUnit
-from generate_tests import generate_vunit_tests
+from generate_vunit_tests import generate_vunit_tests
 
 print("Generating vunit tests from Vivado testbenches")
 generate_vunit_tests()
