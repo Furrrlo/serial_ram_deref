@@ -211,6 +211,7 @@ ARCHITECTURE projecttb OF {args.testbench_name} IS\n\
     SIGNAL tb_rst : STD_LOGIC := '0';\n\
     SIGNAL tb_start : STD_LOGIC := '0';\n\
     SIGNAL tb_clk : STD_LOGIC := '0';\n\
+    SIGNAL tb_passed : STD_LOGIC := '0';\n\
     SIGNAL mem_o_data, mem_i_data : STD_LOGIC_VECTOR (7 DOWNTO 0);\n\
     SIGNAL enable_wire : STD_LOGIC;\n\
     SIGNAL mem_we : STD_LOGIC;\n\
@@ -306,6 +307,15 @@ BEGIN\n\
         END IF;\n\
     END PROCESS;\n\
 \n\
+    -- Fallisci il test se fuori tempo massimo \n\
+    killswitch : PROCESS IS \n\
+    BEGIN \n\
+        WAIT FOR CLOCK_PERIOD*SCENARIOLENGTH; \n\
+        IF not tb_passed = '1' THEN \n\
+            ASSERT false REPORT \"TEST FALLITO (fuori tempo massimo)\" SEVERITY failure; \n\
+        END IF; \n\
+    END PROCESS killswitch; \n\
+\n\
     -- Process without sensitivity list designed to test the actual component.\n\
     testRoutine : PROCESS IS\n\
     BEGIN\n\
@@ -320,6 +330,8 @@ BEGIN\n\
         ASSERT tb_z2 = \"00000000\" REPORT \"TEST FALLITO (postreset Z0--Z3 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z2))) severity failure; \n\
         ASSERT tb_z3 = \"00000000\" REPORT \"TEST FALLITO (postreset Z0--Z3 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z3))) severity failure; \n\
         {data['assertions']} \
+\n\
+        tb_passed <= '1';\n\
 \n\
         --VIVADO-START%% \n\
         ASSERT false REPORT \"Simulation Ended! TEST PASSATO (EXAMPLE)\" SEVERITY failure; \n\
