@@ -1,3 +1,4 @@
+import shutil
 from pathlib import Path
 import re
 
@@ -34,6 +35,8 @@ def generate_vunit_tests(curr_dir=Path('.'),
                 output_text,
                 flags=re.MULTILINE)
             output_fd.write(output_text)
+
+    shutil.rmtree(target_dir)
 
     for child in curr_dir.glob(folder_glob):
         generate_vunit_test(child)
