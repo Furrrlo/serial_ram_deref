@@ -68,6 +68,8 @@ architecture Behavioral of project_reti_logiche is
     type S is (S0, S1, S2, S3, S4, S5, S6, S7, S8);
     signal curr_state, next_state : S;
 begin
+    o_done <= s_done;
+    
     DATAPATH0: datapath port map(
         i_clk => i_clk, 
         i_rst => i_rst, 
@@ -126,11 +128,9 @@ begin
         end case;
     end process;
     
-    o_done <= s_done;
     process(curr_state)
     begin
         o_mem_en <= '0';
-        --o_done <= '0';
         s_done <= '0';
         addr_shift <= '0';
         ex_shift <= '0';
@@ -143,24 +143,14 @@ begin
             when S2 => ex_shift <= '1';
             when S3 => ex_load <= '1';
             when S4 => 
-				ex_load <= '1';
-				addr_shift <= '1';
-            when S5 => 
-				addr_shift <= '1';
-            when S6 => 
-                o_mem_en <= '1';
-            when S7 => 
-                data_load <= '1';
-            when S8 => --o_done <= '1';
-                       s_done <= '1';
+                ex_load <= '1';
+                addr_shift <= '1';
+            when S5 => addr_shift <= '1';
+            when S6 => o_mem_en <= '1';
+            when S7 => data_load <= '1';
+            when S8 => s_done <= '1';
         end case;
     end process;
-    
---    process(s_done)
---    begin
---        report "s_done: "&std_logic'image(s_done);
---    end process;
-    
 end Behavioral;
 
 library IEEE;
@@ -253,11 +243,6 @@ begin
             end if;
         end if;
     end process;
-    
---    process(ex_reg)
---    begin
---        report std_logic'image(ex_reg(1))&std_logic'image(ex_reg(0));
---    end process;
     
     z0_reg_load <= data_load and not ex_reg(1) and not ex_reg(0);
     ZO_REG: out_reg port map(
@@ -423,17 +408,6 @@ begin
             end if;
         end if;
     end process;
-    
---    process(reg_load)
---    begin
---        report "REG_LOAD: "&std_logic'image(reg_load);
---    end process;
-    
---    process(o_done)
---    begin
---        report "O_DONE: "&std_logic'image(o_done);
---    end process;
-    
 
     o_data <= "00000000" when (o_done='0') else
                data_reg when (o_done='1') else
