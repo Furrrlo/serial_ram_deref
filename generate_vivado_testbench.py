@@ -9,6 +9,7 @@ parser = argparse.ArgumentParser(
     description="Generates random tests with a certain number of iterations"
 )
 
+parser.add_argument('testbench_name')
 parser.add_argument('-i', '--iterations', metavar="N", help="Sets the number of iterations, random if left empty.",
                     type=int, default=randrange(1, 10))
 parser.add_argument('-z', '--zeros', action='store_true',
@@ -181,10 +182,10 @@ USE ieee.numeric_std.ALL;\n\
 USE ieee.std_logic_unsigned.ALL;\n\
 USE std.textio.ALL;\n\
 \n\
-ENTITY project_tb IS\n\
-END project_tb;\n\
+ENTITY {args.testbench_name} IS\n\
+END {args.testbench_name};\n\
 \n\
-ARCHITECTURE projecttb OF project_tb IS\n\
+ARCHITECTURE projecttb OF {args.testbench_name} IS\n\
     CONSTANT CLOCK_PERIOD : TIME := 100 ns;\n\
     SIGNAL tb_done : STD_LOGIC;\n\
     SIGNAL mem_address : STD_LOGIC_VECTOR (15 DOWNTO 0) := (OTHERS => '0');\n\
