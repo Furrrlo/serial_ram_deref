@@ -1,6 +1,6 @@
-from random import randrange, choice
 import argparse
-from datetime import datetime
+from pathlib import Path
+from random import randrange, choice
 
 # TODO: implement multiple resets
 
@@ -305,9 +305,14 @@ BEGIN\n\
 \n\
 END projecttb;"
 
-filename = f"generated_test_bench_{int(datetime.now().timestamp())}.vhd"
+i = 1
+while Path("./serial_to_parallel_ram_dereference.srcs/sim_" + str(i)).exists():
+    i += 1
 
-with open(filename, "w+") as f:
+file = Path(f"./serial_to_parallel_ram_dereference.srcs/sim_{str(i)}/new/{args.testbench_name}.vhd")
+
+file.parent.mkdir(parents=True, exist_ok=True)
+with open(file, "w+") as f:
     f.writelines(test_bench_script)
 
-print(f"Generated test bench with name: {filename}")
+print(f"Generated test bench: {file}")
