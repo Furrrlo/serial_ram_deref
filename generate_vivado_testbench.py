@@ -18,10 +18,12 @@ parser.add_argument('-a', '--full_address', action='store_true',
                     help="If flagged forces a testcase with 1 as address (start = 18 clock cycles)")
 parser.add_argument('-r', '--multiple_resets', action='store_true',
                     help="If flagged forces multiple resets inside the test bench")
+parser.add_argument('-m', '--use_example_memory', action='store_true',
+                    help="If flagged uses the memory provided in the example testbench")
 
 args = parser.parse_args()
 
-mem_data = {
+provided_mem_data = {
     0: 20,
     1: 162,
     2: 75,
@@ -62,7 +64,13 @@ def decimal_to_binary(decimal):
 
 
 def get_random_address():
-    return choice(list(mem_data.keys()))
+    if args.use_example_memory:
+        return choice(list(provided_mem_data.keys()))
+    return randrange(65535)
+
+
+def get_random_mem_value():
+    return randrange(65535)  # TODO: 8 bits, should be max 255 but the provided tb uses like 800 wutda
 
 
 def generate_channel():
@@ -88,6 +96,10 @@ def compose_scenarios_and_assertions(num_of_iterations):
         "tb_z3": "0",
     }
 
+    mem_data = {}
+    if args.use_example_memory:
+        mem_data = provided_mem_data
+
     rst_string = generate_random_rst_string()
     zero_rst_string = generate_bit_string(len(rst_string), "0")
     rst = f"{rst_string}"
@@ -109,6 +121,8 @@ def compose_scenarios_and_assertions(num_of_iterations):
         random_address_binary = decimal_to_binary(random_address).lstrip("0")
         channel = generate_channel()
 
+        if not args.use_example_memory:
+            mem_data[random_address] = get_random_mem_value()
         outputs[bits_to_channel_names[channel]] = mem_data[random_address]
 
         # Appending channels
@@ -134,6 +148,7 @@ def compose_scenarios_and_assertions(num_of_iterations):
             "scenario_start": start + start,
             "scenario_rst": rst + rst,
             "scenario_w": w + w,
+            "mem_data": mem_data,
             "assertions": assertions + assertions
         }
 
@@ -141,7 +156,8 @@ def compose_scenarios_and_assertions(num_of_iterations):
         "scenario_start": start,
         "scenario_rst": rst,
         "scenario_w": w,
-        "assertions": assertions
+        "mem_data": mem_data,
+        "assertions": assertions,
     }
 
 
@@ -210,7 +226,7 @@ ARCHITECTURE projecttb OF {args.testbench_name} IS\n\
     -- Channel 1 -> MEM[2] -> 75\n\
 \n\
     TYPE ram_type IS ARRAY (65535 DOWNTO 0) OF STD_LOGIC_VECTOR(7 DOWNTO 0);\n\
-    SIGNAL RAM : ram_type := (  {compose_memory_data(mem_data)}\
+    SIGNAL RAM : ram_type := (  {compose_memory_data(data['mem_data'])}\
                                 OTHERS => \"00000000\"-- (OTHERS => '0')\n\
                             );\n\
 \n\
