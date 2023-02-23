@@ -79,7 +79,7 @@ def generate_channel():
 
 def generate_random_rst_string():
     return "".join(["0" for _ in range(randrange(10))] +
-                   ["1" for _ in range(1, randrange(10))] +
+                   ["1" for _ in range(randrange(1, 10))] +
                    ["0" for _ in range(2, randrange(5, 10))])
 
 
