@@ -20,7 +20,6 @@ ARCHITECTURE projecttb OF tb_full_address IS
     SIGNAL tb_rst : STD_LOGIC := '0';
     SIGNAL tb_start : STD_LOGIC := '0';
     SIGNAL tb_clk : STD_LOGIC := '0';
-    SIGNAL tb_passed : STD_LOGIC := '0';
     SIGNAL mem_o_data, mem_i_data : STD_LOGIC_VECTOR (7 DOWNTO 0);
     SIGNAL enable_wire : STD_LOGIC;
     SIGNAL mem_we : STD_LOGIC;
@@ -132,15 +131,6 @@ BEGIN
         END IF;
     END PROCESS;
 
-    -- Fallisci il test se fuori tempo massimo 
-    killswitch : PROCESS IS 
-    BEGIN 
-        WAIT FOR CLOCK_PERIOD*SCENARIOLENGTH; 
-        IF not tb_passed = '1' THEN 
-            ASSERT false REPORT "TEST FALLITO (fuori tempo massimo)" SEVERITY failure; 
-        END IF; 
-    END PROCESS killswitch; 
-
     -- Process without sensitivity list designed to test the actual component.
     testRoutine : PROCESS IS
     BEGIN
@@ -172,8 +162,6 @@ BEGIN
         ASSERT tb_z1 = "00000000" REPORT "TEST FALLITO (postdone Z0--Z3 != 0 ) found " & integer'image(to_integer(unsigned(tb_z1))) severity failure; 
         ASSERT tb_z2 = "00000000" REPORT "TEST FALLITO (postdone Z0--Z3 != 0 ) found " & integer'image(to_integer(unsigned(tb_z2))) severity failure; 
         ASSERT tb_z3 = "00000000" REPORT "TEST FALLITO (postdone Z0--Z3 != 0 ) found " & integer'image(to_integer(unsigned(tb_z3))) severity failure; 
-     
-        tb_passed <= '1';
 
         --VIVADO-START%% 
         ASSERT false REPORT "Simulation Ended! TEST PASSATO (EXAMPLE)" SEVERITY failure; 
@@ -181,5 +169,6 @@ BEGIN
 
         --VUNIT%% test_runner_cleanup(runner); %%-- 
     END PROCESS testRoutine;
-
+    
+    --VUNIT%% test_runner_watchdog(runner, CLOCK_PERIOD * SCENARIOLENGTH); %%-- 
 END projecttb;
