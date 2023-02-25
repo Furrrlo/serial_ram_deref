@@ -53,18 +53,16 @@ architecture Behavioral of project_reti_logiche is
             i_mem_data : in std_logic_vector(7 downto 0);
             addr_shift : in std_logic;
             ex_shift : in std_logic;
-            ex_load : in std_logic;
             data_load : in std_logic;
             o_done : in std_logic);
     end component;
     
     signal addr_shift : std_logic;
     signal ex_shift : std_logic;
-    signal ex_load : std_logic;
     signal data_load : std_logic;
     signal s_done : std_logic;
     
-    type S is (S0, S1, S2, S3, S4, S5, S6, S7, S8);
+    type S is (S0, S1, S2, S3, S4, S5, S6);
     signal curr_state, next_state : S;
 begin
     o_done <= s_done;
@@ -81,7 +79,6 @@ begin
         i_mem_data => i_mem_data,
         addr_shift => addr_shift, 
         ex_shift => ex_shift, 
-        ex_load => ex_load, 
         data_load => data_load,
         o_done => s_done);
 
@@ -104,25 +101,18 @@ begin
                 end if;
             when S1 => next_state <= S2;
             when S2 =>
-                if i_start = '0' then
+                if i_start = '1' then
                     next_state <= S3;
-                else -- if i_start = '1' then
+                else -- if i_start = '0' then
                     next_state <= S4;
                 end if;
-            when S3 => next_state <= S6;
-            when S4 =>
-                if i_start = '1' then
-                    next_state <= S5;
-                else -- if i_start = '0' then
-                    next_state <= S6;
-                end if;
-            when S5 =>
+            when S3 =>
                 if i_start = '0' then
-                    next_state <= S6;
+                    next_state <= S4;
                 end if;
-            when S6 => next_state <= S7;
-            when S7 => next_state <= S8;
-            when S8 => next_state <= S0;
+            when S4 => next_state <= S5;
+            when S5 => next_state <= S6;
+            when S6 => next_state <= S0;
         end case;
     end process;
     
@@ -132,21 +122,16 @@ begin
         s_done <= '0';
         addr_shift <= '0';
         ex_shift <= '0';
-        ex_load <= '0';
         data_load <= '0';
         
         case curr_state is
             when S0 =>
             when S1 => ex_shift <= '1';
             when S2 => ex_shift <= '1';
-            when S3 => ex_load <= '1';
-            when S4 => 
-                ex_load <= '1';
-                addr_shift <= '1';
-            when S5 => addr_shift <= '1';
-            when S6 => o_mem_en <= '1';
-            when S7 => data_load <= '1';
-            when S8 => s_done <= '1';
+            when S3 => addr_shift <= '1';
+            when S4 => o_mem_en <= '1';
+            when S5 => data_load <= '1';
+            when S6 => s_done <= '1';
         end case;
     end process;
 end Behavioral;
@@ -167,7 +152,6 @@ entity datapath is
         i_mem_data : in std_logic_vector(7 downto 0);
         addr_shift : in std_logic;
         ex_shift : in std_logic;
-        ex_load : in std_logic;
         data_load : in std_logic;
         o_done : in std_logic);
 end datapath;
@@ -202,7 +186,6 @@ architecture Behavioral of datapath is
     
     signal w1 : std_logic;
     signal ex_curr : std_logic_vector(1 downto 0);
-    signal ex_reg : std_logic_vector(1 downto 0);
     signal z0_reg_load, z1_reg_load, z2_reg_load, z3_reg_load : std_logic;
     signal rst_shift_regs : std_logic;
 begin
@@ -229,19 +212,8 @@ begin
         i_en => ex_shift,
         i_s => w1,
         o_p => ex_curr);
-       
-    process(i_rst, i_clk, ex_load)
-    begin
-        if(i_rst = '1') then
-            ex_reg <= "00";
-        elsif i_clk'event and i_clk = '1' then
-            if ex_load = '1' then
-                ex_reg <= ex_curr;
-            end if;
-        end if;
-    end process;
     
-    z0_reg_load <= data_load and not ex_reg(1) and not ex_reg(0);
+    z0_reg_load <= data_load and not ex_curr(1) and not ex_curr(0);
     ZO_REG: out_reg port map(
             i_clk => i_clk,
             i_rst => i_rst,
@@ -250,7 +222,7 @@ begin
             o_done => o_done,
             o_data => o_z0);    
             
-    z1_reg_load <= data_load and not ex_reg(1) and ex_reg(0);
+    z1_reg_load <= data_load and not ex_curr(1) and ex_curr(0);
     Z1_REG: out_reg port map(
             i_clk => i_clk,
             i_rst => i_rst,
@@ -259,7 +231,7 @@ begin
             o_done => o_done,
             o_data => o_z1);    
             
-    z2_reg_load <= data_load and ex_reg(1) and not ex_reg(0);
+    z2_reg_load <= data_load and ex_curr(1) and not ex_curr(0);
     Z2_REG: out_reg port map(
             i_clk => i_clk,
             i_rst => i_rst,
@@ -268,7 +240,7 @@ begin
             o_done => o_done,
             o_data => o_z2);    
             
-    z3_reg_load <= data_load and ex_reg(1) and ex_reg(0);
+    z3_reg_load <= data_load and ex_curr(1) and ex_curr(0);
     Z3_REG: out_reg port map(
             i_clk => i_clk,
             i_rst => i_rst,
