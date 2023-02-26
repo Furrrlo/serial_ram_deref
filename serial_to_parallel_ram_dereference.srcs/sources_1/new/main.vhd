@@ -54,7 +54,7 @@ architecture Behavioral of project_reti_logiche is
             addr_shift : in std_logic;
             ex_shift : in std_logic;
             data_load : in std_logic;
-            o_done : in std_logic);
+            s_done : in std_logic);
     end component;
     
     signal addr_shift : std_logic;
@@ -80,7 +80,7 @@ begin
         addr_shift => addr_shift, 
         ex_shift => ex_shift, 
         data_load => data_load,
-        o_done => s_done);
+        s_done => s_done);
 
     process(i_clk, i_rst)
     begin
@@ -153,7 +153,7 @@ entity datapath is
         addr_shift : in std_logic;
         ex_shift : in std_logic;
         data_load : in std_logic;
-        o_done : in std_logic);
+        s_done : in std_logic);
 end datapath;
 
 architecture Behavioral of datapath is
@@ -180,7 +180,7 @@ architecture Behavioral of datapath is
             i_rst : in std_logic;
             reg_load : in std_logic;
             i_mem_data : in std_logic_vector(7 downto 0);
-            o_done : in std_logic;
+            s_done : in std_logic;
             o_data : out std_logic_vector(7 downto 0));
     end component;
     
@@ -198,7 +198,7 @@ begin
     end process;
 
     -- serial to parallel address
-    rst_shift_regs <= i_rst or o_done;
+    rst_shift_regs <= i_rst or s_done;
     SERIAL_TO_PARALLEL_ADDR: serial_to_parallel_16 port map(
         i_clk => i_clk,
         i_rst => rst_shift_regs,
@@ -219,7 +219,7 @@ begin
             i_rst => i_rst,
             reg_load => z0_reg_load,
             i_mem_data => i_mem_data,
-            o_done => o_done,
+            s_done => s_done,
             o_data => o_z0);    
             
     z1_reg_load <= data_load and not ex_curr(1) and ex_curr(0);
@@ -228,7 +228,7 @@ begin
             i_rst => i_rst,
             reg_load => z1_reg_load,
             i_mem_data => i_mem_data,
-            o_done => o_done,
+            s_done => s_done,
             o_data => o_z1);    
             
     z2_reg_load <= data_load and ex_curr(1) and not ex_curr(0);
@@ -237,7 +237,7 @@ begin
             i_rst => i_rst,
             reg_load => z2_reg_load,
             i_mem_data => i_mem_data,
-            o_done => o_done,
+            s_done => s_done,
             o_data => o_z2);    
             
     z3_reg_load <= data_load and ex_curr(1) and ex_curr(0);
@@ -246,7 +246,7 @@ begin
             i_rst => i_rst,
             reg_load => z3_reg_load,
             i_mem_data => i_mem_data,
-            o_done => o_done,
+            s_done => s_done,
             o_data => o_z3);
         
 end Behavioral;
@@ -359,7 +359,7 @@ entity out_reg is
         i_rst : in std_logic;
         reg_load : in std_logic;
         i_mem_data : in std_logic_vector(7 downto 0);
-        o_done : in std_logic;
+        s_done : in std_logic;
         o_data : out std_logic_vector(7 downto 0));
 end out_reg;
 
@@ -378,7 +378,7 @@ begin
         end if;
     end process;
 
-    o_data <= "00000000" when (o_done='0') else
-               data_reg when (o_done='1') else
+    o_data <= "00000000" when (s_done='0') else
+               data_reg when (s_done='1') else
                "XXXXXXXX";
 end Behavioral;
