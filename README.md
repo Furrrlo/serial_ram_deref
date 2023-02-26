@@ -3,7 +3,7 @@ Computer engineering project for the course "Digital logic design" at Politecnic
 See [the specification](PFRL_Specifica_22_23_V0.0.pdf) and the [rules](PFRL_Regole_22_23_V0.0.pdf).
 
 Datapath design:
-![datapath](datapath.jpg)
+![datapath](datapath.svg)
 
 FSM:
 ![FSM](fsm.jpg)
