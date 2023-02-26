@@ -120,24 +120,28 @@
     <comp lib="0" loc="(780,430)" name="Pin">
       <a name="appearance" val="NewPins"/>
       <a name="facing" val="west"/>
+      <a name="label" val="o_z0"/>
       <a name="output" val="true"/>
       <a name="width" val="8"/>
     </comp>
     <comp lib="0" loc="(780,550)" name="Pin">
       <a name="appearance" val="NewPins"/>
       <a name="facing" val="west"/>
+      <a name="label" val="o_z1"/>
       <a name="output" val="true"/>
       <a name="width" val="8"/>
     </comp>
     <comp lib="0" loc="(780,670)" name="Pin">
       <a name="appearance" val="NewPins"/>
       <a name="facing" val="west"/>
+      <a name="label" val="o_z2"/>
       <a name="output" val="true"/>
       <a name="width" val="8"/>
     </comp>
     <comp lib="0" loc="(780,790)" name="Pin">
       <a name="appearance" val="NewPins"/>
       <a name="facing" val="west"/>
+      <a name="label" val="o_z3"/>
       <a name="output" val="true"/>
       <a name="width" val="8"/>
     </comp>
@@ -316,18 +320,6 @@
       <a name="appearance" val="logisim_evolution"/>
       <a name="label" val="q10"/>
       <a name="width" val="1"/>
-    </comp>
-    <comp lib="8" loc="(817,772)" name="Text">
-      <a name="text" val="o_z3"/>
-    </comp>
-    <comp lib="8" loc="(819,531)" name="Text">
-      <a name="text" val="o_z1"/>
-    </comp>
-    <comp lib="8" loc="(821,412)" name="Text">
-      <a name="text" val="o_z0"/>
-    </comp>
-    <comp lib="8" loc="(823,648)" name="Text">
-      <a name="text" val="o_z2"/>
     </comp>
     <wire from="(1020,220)" to="(1030,220)"/>
     <wire from="(1020,240)" to="(1020,310)"/>
