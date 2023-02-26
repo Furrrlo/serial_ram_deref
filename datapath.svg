@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 1491 841">
+   <style>
+        @media (prefers-color-scheme: dark) {
+            svg { filter: invert(100%); }
+        }
+   </style>
+	
    <polyline fill="none" points="767,535 787,535" stroke="rgb(0, 0, 0)" stroke-linecap="square" stroke-width="4.0"/>
    <polyline fill="none" points="767,775 787,775" stroke="rgb(0, 0, 0)" stroke-linecap="square" stroke-width="4.0"/>
    <polyline fill="none" points="727,765 737,765" stroke="rgb(0, 0, 0)" stroke-linecap="square" stroke-width="4.0"/>
