@@ -6,7 +6,7 @@ Datapath design:
 ![datapath](datapath.svg)
 
 FSM:
-![FSM](fsm.jpg)
+![FSM](fsm.svg)
 
 ## Running vunit tests
 
