@@ -1,8 +1,7 @@
 import argparse
+from math import floor
 from pathlib import Path
 from random import randrange, choice
-
-# TODO: implement multiple resets
 
 parser = argparse.ArgumentParser(
     prog="Test bench generator",
@@ -16,8 +15,8 @@ parser.add_argument('-z', '--zeros', action='store_true',
                     help="If flagged forces a testcase with 0 as address (start = 2 clock cycles)")
 parser.add_argument('-a', '--full_address', action='store_true',
                     help="If flagged forces a testcase with 1 as address (start = 18 clock cycles)")
-parser.add_argument('-r', '--multiple_resets', action='store_true',
-                    help="If flagged forces multiple resets inside the test bench")
+parser.add_argument('-r', '--multiple_resets', help="Probability that a reset will be inserted during processing",
+                    type=float, default=0)
 parser.add_argument('-m', '--use_example_memory', action='store_true',
                     help="If flagged uses the memory provided in the example testbench")
 
@@ -108,6 +107,7 @@ def compose_scenarios_and_assertions(num_of_iterations):
     assertions = ""
 
     random_cycle = randrange(num_of_iterations)
+    wait_for_start = 1
     for i in range(num_of_iterations):
         random_address = get_random_address()
 
@@ -124,32 +124,68 @@ def compose_scenarios_and_assertions(num_of_iterations):
             mem_data[random_address] = get_random_mem_value()
         outputs[bits_to_channel_names[channel]] = mem_data[random_address]
 
-        # Appending channels
-        start += "11"
-        rst += "00"
-        w += channel
+        rst_i = -1
+        if args.multiple_resets > 0:
+            rst_i = randrange(floor((len(random_address_binary) + 22) / args.multiple_resets))
 
-        # Appending address
-        start += generate_bit_string(len(random_address_binary), "1")
-        rst += generate_bit_string(len(random_address_binary), "0")
-        w += random_address_binary
+        if rst_i == 0:
+            start += "1"
+            rst += "1"
+            w += channel[0]
+        elif rst_i == 1:
+            start += "11"
+            rst += "01"
+            w += channel
+        else:
+            # Appending channels
+            start += "11"
+            rst += "00"
+            w += channel
+            if 2 <= rst_i < len(random_address_binary) + 2:
+                start += generate_bit_string(rst_i - 1, "1")
+                rst += generate_bit_string(rst_i - 2, "0") + "1"
+                w += random_address_binary[:rst_i - 1]
+            else:
+                # Appending address
+                start += generate_bit_string(len(random_address_binary), "1")
+                rst += generate_bit_string(len(random_address_binary), "0")
+                w += random_address_binary
+                if len(random_address_binary) + 2 <= rst_i < (len(random_address_binary) + 22):
+                    start += generate_bit_string(rst_i - len(random_address_binary) - 1, "0")
+                    rst += generate_bit_string(rst_i - len(random_address_binary) - 2, "0") + "1"
+                    w += generate_bit_string(rst_i - len(random_address_binary) - 1, "0")
+                else:
+                    # Appending padding
+                    start += generate_bit_string(20, "0")
+                    rst += generate_bit_string(20, "0")
+                    w += generate_bit_string(20, "0")
 
-        # Appending padding
-        start += generate_bit_string(20, "0")
-        rst += generate_bit_string(20, "0")
-        w += generate_bit_string(20, "0")
-
-        # Composing assertion for this iteration
-        assertions += compose_assertion(outputs)
-
-    if args.multiple_resets:
-        return {
-            "scenario_start": start + start,
-            "scenario_rst": rst + rst,
-            "scenario_w": w + w,
-            "mem_data": mem_data,
-            "assertions": assertions + assertions
-        }
+        if rst[-1] == "1":
+            add_zero_after_rst = randrange(5)
+            start += generate_bit_string(add_zero_after_rst, "0")
+            rst += generate_bit_string(add_zero_after_rst, "0")
+            w += generate_bit_string(add_zero_after_rst, "0")
+            if rst[-add_zero_after_rst - 2] == "0":
+                cycles_since_start_signal = len(start) - 1 - add_zero_after_rst - start.rfind("1")
+                if cycles_since_start_signal > 4:
+                    assertions += compose_assertion(outputs, wait_for_start)
+                    wait_for_start = 1
+                    assertions += compose_reset_assertion(False)
+                else:
+                    assertions += compose_reset_assertion(wait_for_start and rst_i != 0)
+                    wait_for_start = 1
+                if add_zero_after_rst == 0:
+                    wait_for_start = 0
+            outputs = {
+                "tb_z0": "0",
+                "tb_z1": "0",
+                "tb_z2": "0",
+                "tb_z3": "0",
+            }
+        else:
+            # Composing assertion for this iteration
+            assertions += compose_assertion(outputs, wait_for_start)
+            wait_for_start = 1
 
     return {
         "scenario_start": start,
@@ -160,20 +196,22 @@ def compose_scenarios_and_assertions(num_of_iterations):
     }
 
 
-def compose_assertion(outputs):
+def compose_assertion(outputs, wait_for_start):
     output_assertion_strings = f"\
         ASSERT tb_z0 = std_logic_vector(to_unsigned({outputs['tb_z0']}, 8))  REPORT \"TEST FALLITO (Z0 ---) found \" & integer'image(to_integer(unsigned(tb_z0))) & \" expected \" & integer'image(to_integer(to_unsigned({outputs['tb_z0']}, 8))) severity failure;\n\
-        ASSERT tb_z1 = std_logic_vector(to_unsigned({outputs['tb_z1']}, 8))  REPORT \"TEST FALLITO (Z1 ---) found \" & integer'image(to_integer(unsigned(tb_z0))) & \" expected \" & integer'image(to_integer(to_unsigned({outputs['tb_z1']}, 8)))  severity failure;\n\
-        ASSERT tb_z2 = std_logic_vector(to_unsigned({outputs['tb_z2']}, 8))  REPORT \"TEST FALLITO (Z2 ---) found \" & integer'image(to_integer(unsigned(tb_z0))) & \" expected \" & integer'image(to_integer(to_unsigned({outputs['tb_z2']}, 8)))  severity failure;\n\
-        ASSERT tb_z3 = std_logic_vector(to_unsigned({outputs['tb_z3']}, 8))  REPORT \"TEST FALLITO (Z3 ---) found \" & integer'image(to_integer(unsigned(tb_z0))) & \" expected \" & integer'image(to_integer(to_unsigned({outputs['tb_z3']}, 8)))  severity failure;\
-        "
-
-    return f"\n\
+        ASSERT tb_z1 = std_logic_vector(to_unsigned({outputs['tb_z1']}, 8))  REPORT \"TEST FALLITO (Z1 ---) found \" & integer'image(to_integer(unsigned(tb_z1))) & \" expected \" & integer'image(to_integer(to_unsigned({outputs['tb_z1']}, 8)))  severity failure;\n\
+        ASSERT tb_z2 = std_logic_vector(to_unsigned({outputs['tb_z2']}, 8))  REPORT \"TEST FALLITO (Z2 ---) found \" & integer'image(to_integer(unsigned(tb_z2))) & \" expected \" & integer'image(to_integer(to_unsigned({outputs['tb_z2']}, 8)))  severity failure;\n\
+        ASSERT tb_z3 = std_logic_vector(to_unsigned({outputs['tb_z3']}, 8))  REPORT \"TEST FALLITO (Z3 ---) found \" & integer'image(to_integer(unsigned(tb_z3))) & \" expected \" & integer'image(to_integer(to_unsigned({outputs['tb_z3']}, 8)))  severity failure;"
+    ris = f"\n"
+    if wait_for_start:
+        ris += f"\n\
         WAIT UNTIL tb_start = '1';\n\
         ASSERT tb_z0 = \"00000000\" REPORT \"TEST FALLITO (poststart Z0 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z0))) severity failure; \n\
         ASSERT tb_z1 = \"00000000\" REPORT \"TEST FALLITO (poststart Z1 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z1))) severity failure; \n\
         ASSERT tb_z2 = \"00000000\" REPORT \"TEST FALLITO (poststart Z2 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z2))) severity failure; \n\
-        ASSERT tb_z3 = \"00000000\" REPORT \"TEST FALLITO (poststart Z3 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z3))) severity failure; \n\
+        ASSERT tb_z3 = \"00000000\" REPORT \"TEST FALLITO (poststart Z3 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z3))) severity failure;"
+
+    ris += f"\n\
         WAIT UNTIL tb_done = '1';\n\
         --WAIT UNTIL rising_edge(tb_clk);\n\
         WAIT FOR CLOCK_PERIOD/2;\n\
@@ -182,8 +220,33 @@ def compose_assertion(outputs):
         ASSERT tb_z0 = \"00000000\" REPORT \"TEST FALLITO (postdone Z0 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z0))) severity failure; \n\
         ASSERT tb_z1 = \"00000000\" REPORT \"TEST FALLITO (postdone Z1 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z1))) severity failure; \n\
         ASSERT tb_z2 = \"00000000\" REPORT \"TEST FALLITO (postdone Z2 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z2))) severity failure; \n\
-        ASSERT tb_z3 = \"00000000\" REPORT \"TEST FALLITO (postdone Z3 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z3))) severity failure; \n\
-    "
+        ASSERT tb_z3 = \"00000000\" REPORT \"TEST FALLITO (postdone Z3 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z3))) severity failure;"
+    return ris
+
+
+def compose_reset_assertion(wait_for_start):
+    ris = ""
+    if wait_for_start:
+        ris = f"\n\
+        WAIT UNTIL tb_start = '1';\n\
+        ASSERT tb_z0 = \"00000000\" REPORT \"TEST FALLITO (poststart Z0 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z0))) severity failure; \n\
+        ASSERT tb_z1 = \"00000000\" REPORT \"TEST FALLITO (poststart Z1 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z1))) severity failure; \n\
+        ASSERT tb_z2 = \"00000000\" REPORT \"TEST FALLITO (poststart Z2 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z2))) severity failure; \n\
+        ASSERT tb_z3 = \"00000000\" REPORT \"TEST FALLITO (poststart Z3 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z3))) severity failure;"
+
+    ris += f"\n\
+        WAIT UNTIL tb_rst = '1';\n\
+        WAIT FOR CLOCK_PERIOD/2;\n\
+        ASSERT tb_z0 = \"00000000\" REPORT \"TEST FALLITO (postreset Z0 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z0))) severity failure; \n\
+        ASSERT tb_z1 = \"00000000\" REPORT \"TEST FALLITO (postreset Z1 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z1))) severity failure; \n\
+        ASSERT tb_z2 = \"00000000\" REPORT \"TEST FALLITO (postreset Z2 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z2))) severity failure; \n\
+        ASSERT tb_z3 = \"00000000\" REPORT \"TEST FALLITO (postreset Z3 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z3))) severity failure; \n\
+        WAIT UNTIL tb_rst = '0';\n\
+        ASSERT tb_z0 = \"00000000\" REPORT \"TEST FALLITO (postreset Z0 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z0))) severity failure; \n\
+        ASSERT tb_z1 = \"00000000\" REPORT \"TEST FALLITO (postreset Z1 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z1))) severity failure; \n\
+        ASSERT tb_z2 = \"00000000\" REPORT \"TEST FALLITO (postreset Z2 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z2))) severity failure; \n\
+        ASSERT tb_z3 = \"00000000\" REPORT \"TEST FALLITO (postreset Z3 != 0 ) found \" & integer'image(to_integer(unsigned(tb_z3))) severity failure;"
+    return ris
 
 
 data = compose_scenarios_and_assertions(args.iterations)

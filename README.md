@@ -82,8 +82,8 @@ optional arguments:
   -a, --full_address    If flagged forces a testcase with 1 as address
                         (start = 18 clock cycles)
   -r, --multiple_resets
-                        If flagged forces multiple resets inside the test
-                        bench
+                        Probability that a reset will be inserted during 
+                        processing, 0 if left empty.
   -m, --use_example_memory
                         If flagged uses the memory provided in the example
                         testbench
