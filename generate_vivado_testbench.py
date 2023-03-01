@@ -1,16 +1,26 @@
 import argparse
 from math import floor
 from pathlib import Path
-from random import randrange, choice
+from random import seed as seed_rnd, randrange, choice
 
 parser = argparse.ArgumentParser(
     prog="Test bench generator",
     description="Generates random tests with a certain number of iterations"
 )
 
+# Generate default seed, copied from the std lib
+try:
+    from os import urandom
+    seed = int.from_bytes(urandom(2500), 'big')
+except NotImplementedError:
+    import time
+    seed = int(time.time() * 256)
+
 parser.add_argument('testbench_name')
+parser.add_argument('-s', '--seed', metavar="N", help="Sets the random seed used to generate the testbench.",
+                    type=int, default=seed)
 parser.add_argument('-i', '--iterations', metavar="N", help="Sets the number of iterations, random if left empty.",
-                    type=int, default=randrange(1, 10))
+                    type=int, default=10)
 parser.add_argument('-z', '--zeros', action='store_true',
                     help="If flagged forces a testcase with 0 as address (start = 2 clock cycles)")
 parser.add_argument('-a', '--full_address', action='store_true',
@@ -87,6 +97,8 @@ def generate_bit_string(length, val):
 
 
 def compose_scenarios_and_assertions(num_of_iterations):
+    seed_rnd(seed)
+    
     outputs = {
         "tb_z0": "0",
         "tb_z1": "0",
@@ -256,8 +268,20 @@ def compose_reset_assertion(wait_for_start):
 
 data = compose_scenarios_and_assertions(args.iterations)
 
+generated_cmd = "-- python3 generate_vivado_testbench.py \\\n";
+generated_cmd += f"--    --seed {args.seed} \\\n"
+generated_cmd += f"--    --iterations {args.iterations} \\\n"
+generated_cmd += f"--    --zeros \\\n" if args.zeros else ''
+generated_cmd += f"--    --full_address \\\n" if args.full_address else ''
+generated_cmd += f"--    --multiple_resets {args.multiple_resets} \\\n"
+generated_cmd += f"--    --use_example_memory \\\n" if args.use_example_memory else ''
+generated_cmd += f"--    args.testbench_name \n"
+
 test_bench_script = f"\
 -- TB EXAMPLE PFRL 2022-2023\n\
+\n\
+-- Generated using: \n\
+{generated_cmd}\
 \n\
 --VUNIT%% library vunit_lib; %%-- \n\
 --VUNIT%% context vunit_lib.vunit_context; %%-- \n\
