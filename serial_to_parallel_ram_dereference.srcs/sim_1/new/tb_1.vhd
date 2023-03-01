@@ -1,15 +1,19 @@
 -- TB EXAMPLE PFRL 2022-2023
 
+--VUNIT%% library vunit_lib; %%--
+--VUNIT%% context vunit_lib.vunit_context; %%--
+
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 USE ieee.std_logic_unsigned.ALL;
 USE std.textio.ALL;
 
-ENTITY project_tb IS
-END project_tb;
+ENTITY project_1_tb IS
+    --VUNIT%% generic (runner_cfg : string := runner_cfg_default); %%--
+END project_1_tb;
 
-ARCHITECTURE projecttb OF project_tb IS
+ARCHITECTURE projecttb OF project_1_tb IS
     CONSTANT CLOCK_PERIOD : TIME := 100 ns;
     SIGNAL tb_done : STD_LOGIC;
     SIGNAL mem_address : STD_LOGIC_VECTOR (15 DOWNTO 0) := (OTHERS => '0');
@@ -130,6 +134,7 @@ BEGIN
     -- Process without sensitivity list designed to test the actual component.
     testRoutine : PROCESS IS
     BEGIN
+        --VUNIT%% test_runner_setup(runner, runner_cfg); %%--
         mem_i_data <= "00000000";
         -- wait for 10000 ns;
         WAIT UNTIL tb_rst = '1';
@@ -379,7 +384,11 @@ BEGIN
         ASSERT tb_z2 = "00000000" REPORT "TEST FALLITO (postdone Z0--Z3 != 0 ) found " & integer'image(to_integer(unsigned(tb_z2))) severity failure; 
         ASSERT tb_z3 = "00000000" REPORT "TEST FALLITO (postdone Z0--Z3 != 0 ) found " & integer'image(to_integer(unsigned(tb_z3))) severity failure; 
      
+        --VIVADO-START%% 
         ASSERT false REPORT "Simulation Ended! TEST PASSATO (EXAMPLE)" SEVERITY failure;
+        --VIVADO-END%%
+
+        --VUNIT%% test_runner_cleanup(runner); %%--
     END PROCESS testRoutine;
 
 END projecttb;
