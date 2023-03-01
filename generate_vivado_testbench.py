@@ -125,7 +125,9 @@ def compose_scenarios_and_assertions(num_of_iterations):
         outputs[bits_to_channel_names[channel]] = mem_data[random_address]
 
         rst_idx = -1
-        if args.multiple_resets > 0:
+        # Last iteration can't be a rst or the testbench triggers the watchdog
+        # cause it ends with a WAIT UNTIL tb_rst = '0';
+        if i != num_of_iterations and args.multiple_resets > 0:
             start_signal_len = len(random_address_binary) + 22
             rst_idx = randrange(floor(start_signal_len / args.multiple_resets))
 
