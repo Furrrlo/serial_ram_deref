@@ -124,68 +124,71 @@ def compose_scenarios_and_assertions(num_of_iterations):
             mem_data[random_address] = get_random_mem_value()
         outputs[bits_to_channel_names[channel]] = mem_data[random_address]
 
-        rst_i = -1
+        rst_idx = -1
         if args.multiple_resets > 0:
-            rst_i = randrange(floor((len(random_address_binary) + 22) / args.multiple_resets))
+            start_signal_len = len(random_address_binary) + 22
+            rst_idx = randrange(floor(start_signal_len / args.multiple_resets))
 
-        if rst_i == 0:
+        rst_in_address_bits = (2 <= rst_idx < len(random_address_binary) + 2)
+        rst_in_computation_bits = (len(random_address_binary) + 2 <= rst_idx < (len(random_address_binary) + 22))
+                
+        if rst_idx == 0: # reset at first bit
             start += "1"
             rst += "1"
             w += channel[0]
-        elif rst_i == 1:
+        elif rst_idx == 1: # reset at second bit
             start += "11"
             rst += "01"
             w += channel
+        elif rst_in_address_bits:
+            # Cut all signals to the selected rst index
+            start += "11" + generate_bit_string(rst_idx - 1, "1")
+            rst += "00" + generate_bit_string(rst_idx - 2, "0") + "1"
+            w += channel + random_address_binary[:rst_idx - 1]
         else:
-            # Appending channels
-            start += "11"
-            rst += "00"
-            w += channel
-            if 2 <= rst_i < len(random_address_binary) + 2:
-                start += generate_bit_string(rst_i - 1, "1")
-                rst += generate_bit_string(rst_i - 2, "0") + "1"
-                w += random_address_binary[:rst_i - 1]
-            else:
-                # Appending address
-                start += generate_bit_string(len(random_address_binary), "1")
-                rst += generate_bit_string(len(random_address_binary), "0")
-                w += random_address_binary
-                if len(random_address_binary) + 2 <= rst_i < (len(random_address_binary) + 22):
-                    start += generate_bit_string(rst_i - len(random_address_binary) - 1, "0")
-                    rst += generate_bit_string(rst_i - len(random_address_binary) - 2, "0") + "1"
-                    w += generate_bit_string(rst_i - len(random_address_binary) - 1, "0")
-                else:
-                    # Appending padding
-                    start += generate_bit_string(20, "0")
-                    rst += generate_bit_string(20, "0")
-                    w += generate_bit_string(20, "0")
+            # Generate address bits normally
+            start += "11" + generate_bit_string(len(random_address_binary), "1")
+            rst += "00" + generate_bit_string(len(random_address_binary), "0")
+            w += channel + random_address_binary
+            
+            if rst_in_computation_bits:
+                start += generate_bit_string(rst_idx - len(random_address_binary) - 1, "0")
+                rst += generate_bit_string(rst_idx - len(random_address_binary) - 2, "0") + "1"
+                w += generate_bit_string(rst_idx - len(random_address_binary) - 1, "0")
+            else: # No reset
+                start += generate_bit_string(20, "0")
+                rst += generate_bit_string(20, "0")
+                w += generate_bit_string(20, "0")
 
-        if rst[-1] == "1":
-            add_zero_after_rst = randrange(5)
-            start += generate_bit_string(add_zero_after_rst, "0")
-            rst += generate_bit_string(add_zero_after_rst, "0")
-            w += generate_bit_string(add_zero_after_rst, "0")
-            if rst[-add_zero_after_rst - 2] == "0":
-                cycles_since_start_signal = len(start) - 1 - add_zero_after_rst - start.rfind("1")
+        did_add_rst = (rst[-1] == "1")
+        zero_before_rst = (rst[-2] == "0")
+        if not did_add_rst:
+            # Composing assertion for this iteration
+            assertions += compose_assertion(outputs, wait_for_start)
+            wait_for_start = 1
+        else:
+            zeros_after_rst = randrange(5)
+            start += generate_bit_string(zeros_after_rst, "0")
+            rst += generate_bit_string(zeros_after_rst, "0")
+            w += generate_bit_string(zeros_after_rst, "0")
+            if zero_before_rst:
+                # At 3rd cycle we get output, so if we are after the 4th we need to check correctness
+                cycles_since_start_signal = len(start) - 1 - zeros_after_rst - start.rfind("1")
                 if cycles_since_start_signal > 4:
                     assertions += compose_assertion(outputs, wait_for_start)
                     wait_for_start = 1
                     assertions += compose_reset_assertion(False)
                 else:
-                    assertions += compose_reset_assertion(wait_for_start and rst_i != 0)
+                    assertions += compose_reset_assertion(wait_for_start and rst_idx != 0)
                     wait_for_start = 1
-                if add_zero_after_rst == 0:
-                    wait_for_start = 0
+                wait_for_start = 0 if zeros_after_rst == 0 else wait_for_start
+            
             outputs = {
                 "tb_z0": "0",
                 "tb_z1": "0",
                 "tb_z2": "0",
                 "tb_z3": "0",
             }
-        else:
-            # Composing assertion for this iteration
-            assertions += compose_assertion(outputs, wait_for_start)
-            wait_for_start = 1
 
     return {
         "scenario_start": start,
