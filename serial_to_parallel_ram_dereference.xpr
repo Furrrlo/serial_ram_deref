@@ -44,7 +44,7 @@
     <Option Name="SimulatorGccVersionActiveHdl" Val="9.3.0"/>
     <Option Name="TargetLanguage" Val="VHDL"/>
     <Option Name="BoardPart" Val=""/>
-    <Option Name="ActiveSimSet" Val="sim_0_prof"/>
+    <Option Name="ActiveSimSet" Val="sim_3"/>
     <Option Name="DefaultLib" Val="xil_defaultlib"/>
     <Option Name="ProjectType" Val="Default"/>
     <Option Name="IPOutputRepo" Val="$PCACHEDIR/ip"/>
@@ -58,7 +58,7 @@
     <Option Name="IPUserFilesDir" Val="$PIPUSERFILESDIR"/>
     <Option Name="IPStaticSourceDir" Val="$PIPUSERFILESDIR/ipstatic"/>
     <Option Name="EnableBDX" Val="FALSE"/>
-    <Option Name="WTXSimLaunchSim" Val="99"/>
+    <Option Name="WTXSimLaunchSim" Val="127"/>
     <Option Name="WTModelSimLaunchSim" Val="0"/>
     <Option Name="WTQuestaLaunchSim" Val="0"/>
     <Option Name="WTIesLaunchSim" Val="0"/>
@@ -128,7 +128,7 @@
         <Option Name="TopAutoSet" Val="TRUE"/>
       </Config>
     </FileSet>
-    <FileSet Name="sim_0_prof" Type="SimulationSrcs" RelSrcDir="$PSRCDIR/sim_0_prof" RelGenDir="$PGENDIR/sim_0_prof">
+    <FileSet Name="sim_0" Type="SimulationSrcs" RelSrcDir="$PSRCDIR/sim_0" RelGenDir="$PGENDIR/sim_0">
       <Filter Type="Srcs"/>
       <File Path="$PSRCDIR/sim_0/new/tb_example23.vhd">
         <FileInfo>
@@ -144,14 +144,16 @@
         <Option Name="TransportPathDelay" Val="0"/>
         <Option Name="TransportIntDelay" Val="0"/>
         <Option Name="SelectedSimModel" Val="rtl"/>
+        <Option Name="SimMode" Val="post-synthesis"/>
         <Option Name="PamDesignTestbench" Val=""/>
         <Option Name="PamDutBypassFile" Val="xil_dut_bypass"/>
         <Option Name="PamSignalDriverFile" Val="xil_bypass_driver"/>
         <Option Name="PamPseudoTop" Val="pseudo_tb"/>
         <Option Name="SrcSet" Val="sources_1"/>
+        <Option Name="NLNetlistMode" Val="funcsim"/>
       </Config>
     </FileSet>
-    <FileSet Name="sim_1_prof" Type="SimulationSrcs" RelSrcDir="$PSRCDIR/sim_1_prof" RelGenDir="$PGENDIR/sim_1_prof">
+    <FileSet Name="sim_1" Type="SimulationSrcs" RelSrcDir="$PSRCDIR/sim_1" RelGenDir="$PGENDIR/sim_1">
       <Filter Type="Srcs"/>
       <File Path="$PSRCDIR/sim_1/new/tb_1.vhd">
         <FileInfo>
@@ -161,20 +163,22 @@
       </File>
       <Config>
         <Option Name="DesignMode" Val="RTL"/>
-        <Option Name="TopModule" Val="project_tb_1"/>
+        <Option Name="TopModule" Val="project_1_tb"/>
         <Option Name="TopLib" Val="xil_defaultlib"/>
         <Option Name="TopAutoSet" Val="TRUE"/>
         <Option Name="TransportPathDelay" Val="0"/>
         <Option Name="TransportIntDelay" Val="0"/>
         <Option Name="SelectedSimModel" Val="rtl"/>
+        <Option Name="SimMode" Val="post-synthesis"/>
         <Option Name="PamDesignTestbench" Val=""/>
         <Option Name="PamDutBypassFile" Val="xil_dut_bypass"/>
         <Option Name="PamSignalDriverFile" Val="xil_bypass_driver"/>
         <Option Name="PamPseudoTop" Val="pseudo_tb"/>
         <Option Name="SrcSet" Val="sources_1"/>
+        <Option Name="NLNetlistMode" Val="funcsim"/>
       </Config>
     </FileSet>
-    <FileSet Name="sim_2_prof" Type="SimulationSrcs" RelSrcDir="$PSRCDIR/sim_2_prof" RelGenDir="$PGENDIR/sim_2_prof">
+    <FileSet Name="sim_2" Type="SimulationSrcs" RelSrcDir="$PSRCDIR/sim_2" RelGenDir="$PGENDIR/sim_2">
       <Filter Type="Srcs"/>
       <File Path="$PSRCDIR/sim_2/new/tb_2.vhd">
         <FileInfo>
@@ -184,7 +188,7 @@
       </File>
       <Config>
         <Option Name="DesignMode" Val="RTL"/>
-        <Option Name="TopModule" Val="project_tb_2"/>
+        <Option Name="TopModule" Val="project_2_tb"/>
         <Option Name="TopLib" Val="xil_defaultlib"/>
         <Option Name="TopAutoSet" Val="TRUE"/>
         <Option Name="TransportPathDelay" Val="0"/>
@@ -197,7 +201,7 @@
         <Option Name="SrcSet" Val="sources_1"/>
       </Config>
     </FileSet>
-    <FileSet Name="sim_3_prof" Type="SimulationSrcs" RelSrcDir="$PSRCDIR/sim_3_prof" RelGenDir="$PGENDIR/sim_3_prof">
+    <FileSet Name="sim_3" Type="SimulationSrcs" RelSrcDir="$PSRCDIR/sim_3" RelGenDir="$PGENDIR/sim_3">
       <Filter Type="Srcs"/>
       <File Path="$PSRCDIR/sim_3/new/tb_3.vhd">
         <FileInfo>
@@ -207,7 +211,7 @@
       </File>
       <Config>
         <Option Name="DesignMode" Val="RTL"/>
-        <Option Name="TopModule" Val="project_tb_3"/>
+        <Option Name="TopModule" Val="project_3_tb"/>
         <Option Name="TopLib" Val="xil_defaultlib"/>
         <Option Name="TopAutoSet" Val="TRUE"/>
         <Option Name="TransportPathDelay" Val="0"/>
@@ -220,7 +224,7 @@
         <Option Name="SrcSet" Val="sources_1"/>
       </Config>
     </FileSet>
-    <FileSet Name="sim_4_prof" Type="SimulationSrcs" RelSrcDir="$PSRCDIR/sim_4_prof" RelGenDir="$PGENDIR/sim_4_prof">
+    <FileSet Name="sim_4" Type="SimulationSrcs" RelSrcDir="$PSRCDIR/sim_4" RelGenDir="$PGENDIR/sim_4">
       <Filter Type="Srcs"/>
       <File Path="$PSRCDIR/sim_4/new/tb_4.vhd">
         <FileInfo>
@@ -230,7 +234,7 @@
       </File>
       <Config>
         <Option Name="DesignMode" Val="RTL"/>
-        <Option Name="TopModule" Val="project_tb_4"/>
+        <Option Name="TopModule" Val="project_4_tb"/>
         <Option Name="TopLib" Val="xil_defaultlib"/>
         <Option Name="TopAutoSet" Val="TRUE"/>
         <Option Name="TransportPathDelay" Val="0"/>
@@ -243,7 +247,7 @@
         <Option Name="SrcSet" Val="sources_1"/>
       </Config>
     </FileSet>
-    <FileSet Name="sim_5_prof" Type="SimulationSrcs" RelSrcDir="$PSRCDIR/sim_5_prof" RelGenDir="$PGENDIR/sim_5_prof">
+    <FileSet Name="sim_5" Type="SimulationSrcs" RelSrcDir="$PSRCDIR/sim_5" RelGenDir="$PGENDIR/sim_5">
       <Filter Type="Srcs"/>
       <File Path="$PSRCDIR/sim_5/new/tb_5.vhd">
         <FileInfo>
@@ -253,7 +257,7 @@
       </File>
       <Config>
         <Option Name="DesignMode" Val="RTL"/>
-        <Option Name="TopModule" Val="project_tb_5"/>
+        <Option Name="TopModule" Val="project_5_tb"/>
         <Option Name="TopLib" Val="xil_defaultlib"/>
         <Option Name="TopAutoSet" Val="TRUE"/>
         <Option Name="TransportPathDelay" Val="0"/>
@@ -266,7 +270,7 @@
         <Option Name="SrcSet" Val="sources_1"/>
       </Config>
     </FileSet>
-    <FileSet Name="sim_6_prof" Type="SimulationSrcs" RelSrcDir="$PSRCDIR/sim_6_prof" RelGenDir="$PGENDIR/sim_6_prof">
+    <FileSet Name="sim_6" Type="SimulationSrcs" RelSrcDir="$PSRCDIR/sim_6" RelGenDir="$PGENDIR/sim_6">
       <Filter Type="Srcs"/>
       <File Path="$PSRCDIR/sim_6/new/tb_6.vhd">
         <FileInfo>
@@ -276,7 +280,7 @@
       </File>
       <Config>
         <Option Name="DesignMode" Val="RTL"/>
-        <Option Name="TopModule" Val="project_tb_6"/>
+        <Option Name="TopModule" Val="project_6_tb"/>
         <Option Name="TopLib" Val="xil_defaultlib"/>
         <Option Name="TopAutoSet" Val="TRUE"/>
         <Option Name="TransportPathDelay" Val="0"/>
@@ -289,7 +293,7 @@
         <Option Name="SrcSet" Val="sources_1"/>
       </Config>
     </FileSet>
-    <FileSet Name="sim_7_prof" Type="SimulationSrcs" RelSrcDir="$PSRCDIR/sim_7_prof" RelGenDir="$PGENDIR/sim_7_prof">
+    <FileSet Name="sim_7" Type="SimulationSrcs" RelSrcDir="$PSRCDIR/sim_7" RelGenDir="$PGENDIR/sim_7">
       <Filter Type="Srcs"/>
       <File Path="$PSRCDIR/sim_7/new/tb_7.vhd">
         <FileInfo>
@@ -299,7 +303,7 @@
       </File>
       <Config>
         <Option Name="DesignMode" Val="RTL"/>
-        <Option Name="TopModule" Val="project_tb_7"/>
+        <Option Name="TopModule" Val="project_7_tb"/>
         <Option Name="TopLib" Val="xil_defaultlib"/>
         <Option Name="TopAutoSet" Val="TRUE"/>
         <Option Name="TransportPathDelay" Val="0"/>
@@ -328,11 +332,13 @@
         <Option Name="TransportPathDelay" Val="0"/>
         <Option Name="TransportIntDelay" Val="0"/>
         <Option Name="SelectedSimModel" Val="rtl"/>
+        <Option Name="SimMode" Val="post-synthesis"/>
         <Option Name="PamDesignTestbench" Val=""/>
         <Option Name="PamDutBypassFile" Val="xil_dut_bypass"/>
         <Option Name="PamSignalDriverFile" Val="xil_bypass_driver"/>
         <Option Name="PamPseudoTop" Val="pseudo_tb"/>
         <Option Name="SrcSet" Val="sources_1"/>
+        <Option Name="NLNetlistMode" Val="funcsim"/>
       </Config>
     </FileSet>
     <FileSet Name="sim_9" Type="SimulationSrcs" RelSrcDir="$PSRCDIR/sim_9" RelGenDir="$PGENDIR/sim_9">
@@ -351,11 +357,13 @@
         <Option Name="TransportPathDelay" Val="0"/>
         <Option Name="TransportIntDelay" Val="0"/>
         <Option Name="SelectedSimModel" Val="rtl"/>
+        <Option Name="SimMode" Val="post-synthesis"/>
         <Option Name="PamDesignTestbench" Val=""/>
         <Option Name="PamDutBypassFile" Val="xil_dut_bypass"/>
         <Option Name="PamSignalDriverFile" Val="xil_bypass_driver"/>
         <Option Name="PamPseudoTop" Val="pseudo_tb"/>
         <Option Name="SrcSet" Val="sources_1"/>
+        <Option Name="NLNetlistMode" Val="funcsim"/>
       </Config>
     </FileSet>
     <FileSet Name="sim_10" Type="SimulationSrcs" RelSrcDir="$PSRCDIR/sim_10" RelGenDir="$PGENDIR/sim_10">
@@ -374,11 +382,13 @@
         <Option Name="TransportPathDelay" Val="0"/>
         <Option Name="TransportIntDelay" Val="0"/>
         <Option Name="SelectedSimModel" Val="rtl"/>
+        <Option Name="SimMode" Val="post-synthesis"/>
         <Option Name="PamDesignTestbench" Val=""/>
         <Option Name="PamDutBypassFile" Val="xil_dut_bypass"/>
         <Option Name="PamSignalDriverFile" Val="xil_bypass_driver"/>
         <Option Name="PamPseudoTop" Val="pseudo_tb"/>
         <Option Name="SrcSet" Val="sources_1"/>
+        <Option Name="NLNetlistMode" Val="funcsim"/>
       </Config>
     </FileSet>
     <FileSet Name="sim_11" Type="SimulationSrcs" RelSrcDir="$PSRCDIR/sim_11" RelGenDir="$PGENDIR/sim_11">
@@ -397,11 +407,13 @@
         <Option Name="TransportPathDelay" Val="0"/>
         <Option Name="TransportIntDelay" Val="0"/>
         <Option Name="SelectedSimModel" Val="rtl"/>
+        <Option Name="SimMode" Val="post-synthesis"/>
         <Option Name="PamDesignTestbench" Val=""/>
         <Option Name="PamDutBypassFile" Val="xil_dut_bypass"/>
         <Option Name="PamSignalDriverFile" Val="xil_bypass_driver"/>
         <Option Name="PamPseudoTop" Val="pseudo_tb"/>
         <Option Name="SrcSet" Val="sources_1"/>
+        <Option Name="NLNetlistMode" Val="funcsim"/>
       </Config>
     </FileSet>
     <FileSet Name="sim_12" Type="SimulationSrcs" RelSrcDir="$PSRCDIR/sim_12" RelGenDir="$PGENDIR/sim_12">
@@ -420,11 +432,13 @@
         <Option Name="TransportPathDelay" Val="0"/>
         <Option Name="TransportIntDelay" Val="0"/>
         <Option Name="SelectedSimModel" Val="rtl"/>
+        <Option Name="SimMode" Val="post-synthesis"/>
         <Option Name="PamDesignTestbench" Val=""/>
         <Option Name="PamDutBypassFile" Val="xil_dut_bypass"/>
         <Option Name="PamSignalDriverFile" Val="xil_bypass_driver"/>
         <Option Name="PamPseudoTop" Val="pseudo_tb"/>
         <Option Name="SrcSet" Val="sources_1"/>
+        <Option Name="NLNetlistMode" Val="funcsim"/>
       </Config>
     </FileSet>
     <FileSet Name="sim_13" Type="SimulationSrcs" RelSrcDir="$PSRCDIR/sim_13" RelGenDir="$PGENDIR/sim_13">
@@ -443,11 +457,13 @@
         <Option Name="TransportPathDelay" Val="0"/>
         <Option Name="TransportIntDelay" Val="0"/>
         <Option Name="SelectedSimModel" Val="rtl"/>
+        <Option Name="SimMode" Val="post-synthesis"/>
         <Option Name="PamDesignTestbench" Val=""/>
         <Option Name="PamDutBypassFile" Val="xil_dut_bypass"/>
         <Option Name="PamSignalDriverFile" Val="xil_bypass_driver"/>
         <Option Name="PamPseudoTop" Val="pseudo_tb"/>
         <Option Name="SrcSet" Val="sources_1"/>
+        <Option Name="NLNetlistMode" Val="funcsim"/>
       </Config>
     </FileSet>
     <FileSet Name="sim_14" Type="SimulationSrcs" RelSrcDir="$PSRCDIR/sim_14" RelGenDir="$PGENDIR/sim_14">
@@ -466,11 +482,13 @@
         <Option Name="TransportPathDelay" Val="0"/>
         <Option Name="TransportIntDelay" Val="0"/>
         <Option Name="SelectedSimModel" Val="rtl"/>
+        <Option Name="SimMode" Val="post-synthesis"/>
         <Option Name="PamDesignTestbench" Val=""/>
         <Option Name="PamDutBypassFile" Val="xil_dut_bypass"/>
         <Option Name="PamSignalDriverFile" Val="xil_bypass_driver"/>
         <Option Name="PamPseudoTop" Val="pseudo_tb"/>
         <Option Name="SrcSet" Val="sources_1"/>
+        <Option Name="NLNetlistMode" Val="funcsim"/>
       </Config>
     </FileSet>
     <FileSet Name="sim_15" Type="SimulationSrcs" RelSrcDir="$PSRCDIR/sim_15" RelGenDir="$PGENDIR/sim_15">
@@ -489,11 +507,13 @@
         <Option Name="TransportPathDelay" Val="0"/>
         <Option Name="TransportIntDelay" Val="0"/>
         <Option Name="SelectedSimModel" Val="rtl"/>
+        <Option Name="SimMode" Val="post-synthesis"/>
         <Option Name="PamDesignTestbench" Val=""/>
         <Option Name="PamDutBypassFile" Val="xil_dut_bypass"/>
         <Option Name="PamSignalDriverFile" Val="xil_bypass_driver"/>
         <Option Name="PamPseudoTop" Val="pseudo_tb"/>
         <Option Name="SrcSet" Val="sources_1"/>
+        <Option Name="NLNetlistMode" Val="funcsim"/>
       </Config>
     </FileSet>
   </FileSets>

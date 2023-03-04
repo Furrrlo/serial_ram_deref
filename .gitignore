@@ -9,4 +9,5 @@ serial_to_parallel_ram_dereference.sim
 venv
 vunit-tests-generated
 vunit_out
+vivado_out
 __pycache__

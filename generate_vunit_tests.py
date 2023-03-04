@@ -2,9 +2,10 @@ import shutil
 from pathlib import Path
 import re
 
+from vivado_utils import get_vivado_testbenches
+
 
 def generate_vunit_tests(curr_dir=Path('.'),
-                         folder_glob="serial_to_parallel_ram_dereference.srcs/sim_*/**/*.vhd",
                          target_dir=Path('vunit-tests-generated')):
     def generate_vunit_test(file: Path):
         if file.is_dir():
@@ -39,8 +40,14 @@ def generate_vunit_tests(curr_dir=Path('.'),
     if target_dir.exists():
         shutil.rmtree(target_dir)
 
-    for child in curr_dir.glob(folder_glob):
-        generate_vunit_test(child)
+    for testbench in get_vivado_testbenches(working_dir=curr_dir):
+        if len(testbench.vhdl_files) == 0:
+            continue
+
+        if len(testbench.vhdl_files) > 1:
+            raise "Found multiple vhd file for simulation set " + testbench.simulation_set
+
+        generate_vunit_test(testbench.vhdl_files[0])
 
 
 if __name__ == '__main__':

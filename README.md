@@ -59,6 +59,24 @@ Then you can finally run tests
 python3 run-vunit.py
 ```
 
+## Running Vivado post-synthesys tests
+
+With Vivado installed, you need to set up env variables to have Vivado on the path.
+
+On Windows (only in batch, it does not seem to work in powershell) do:
+```batch
+C:\Path\to\install\dir\Xilinx\Vivado\2022.2\settings64.bat
+```
+On Linux:
+```bash
+source Path/to/install/dir/Xilinx/Vivado/2022.2/settings64
+```
+
+Then run
+```bash
+python3 run-vivado-post-synthesis.py
+```
+
 ## Generating additional testbenches
 
 Additional testbenches can be generated using the following script 
