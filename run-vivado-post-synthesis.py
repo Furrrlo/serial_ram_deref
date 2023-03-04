@@ -1,10 +1,10 @@
-from multiprocessing import Pool, freeze_support
-from subprocess import CompletedProcess, run, STDOUT, PIPE, CalledProcessError
+import os
 from pathlib import Path
-from typing import List
+from subprocess import CompletedProcess, run, STDOUT, PIPE, CalledProcessError
 from timeit import default_timer as timer
+from typing import List
 
-from vivado_utils import find_project_name, get_vivado_testbenches, Testbench
+from vivado_utils import find_project_name, get_vivado_testbenches
 
 project_dir = Path(".")
 project = find_project_name(target_dir=project_dir)
@@ -13,14 +13,25 @@ build_dir = project_dir.joinpath("vivado_out")
 build_dir.mkdir(exist_ok=True)
 
 
-def run_tcl_commands(file: Path, cmds: List[str], capture_output=False) -> CompletedProcess:
-    cmds = [f"open_project {project_dir.joinpath(project + '.xpr')}", *cmds]
-    with open(file, "w") as fd:
-        fd.writelines(cmd + '\n' for cmd in cmds)
+def run_tcl_commands(cmd_id: str, cmds: List[str], capture_output=False) -> CompletedProcess:
+    tcl_file = build_dir.joinpath(cmd_id + ".tcl")
+    log_file = build_dir.joinpath(cmd_id + ".log")
+    journal_file = build_dir.joinpath(cmd_id + ".jou")
 
-    shellcmd = "vivado -m64 -mode batch -source " + str(file.absolute())
+    with open(tcl_file, "w") as fd:
+        fd.writelines(cmd + '\n' for cmd in cmds)
+    if log_file.exists():
+        os.remove(log_file)
+    if journal_file.exists():
+        os.remove(journal_file)
+
     return run(
-        shellcmd,
+        f"vivado -m64 -mode batch "
+        f"-tempDir {str(build_dir.absolute())} "
+        f"-log {str(log_file.absolute())} "
+        f"-journal {str(journal_file.absolute())} "
+        f"-source {str(tcl_file.absolute())} "
+        f"{project_dir.joinpath(project + '.xpr')}",
         shell=True,
         stdout=PIPE if capture_output else None,
         stderr=STDOUT if capture_output else None,
@@ -29,7 +40,7 @@ def run_tcl_commands(file: Path, cmds: List[str], capture_output=False) -> Compl
 
 
 run_tcl_commands(
-    build_dir.joinpath("synthesis.tcl"),
+    "synthesis",
     ["synth_design -top project_reti_logiche -part xc7a200tfbg484-1"])
 print('\n\n', end="")
 
@@ -40,7 +51,7 @@ for tb in get_vivado_testbenches():
     start = timer()
     try:
         output = run_tcl_commands(
-            build_dir.joinpath(tb.simulation_set + ".tcl"),
+            tb.simulation_set,
             [
                 f"launch_simulation -simset [get_filesets {tb.simulation_set} ] -mode post-synthesis -type functional",
                 "run all",
