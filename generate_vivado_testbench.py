@@ -97,7 +97,7 @@ def generate_bit_string(length, val):
 
 
 def compose_scenarios_and_assertions(num_of_iterations):
-    seed_rnd(seed)
+    seed_rnd(args.seed)
     
     outputs = {
         "tb_z0": "0",
@@ -275,7 +275,7 @@ generated_cmd += f"--    --zeros \\\n" if args.zeros else ''
 generated_cmd += f"--    --full_address \\\n" if args.full_address else ''
 generated_cmd += f"--    --multiple_resets {args.multiple_resets} \\\n"
 generated_cmd += f"--    --use_example_memory \\\n" if args.use_example_memory else ''
-generated_cmd += f"--    args.testbench_name \n"
+generated_cmd += f"--    {args.testbench_name} \n"
 
 test_bench_script = f"\
 -- TB EXAMPLE PFRL 2022-2023\n\
