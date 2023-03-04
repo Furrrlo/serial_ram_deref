@@ -1,7 +1,8 @@
 import argparse
 from math import floor
-from pathlib import Path
 from random import seed as seed_rnd, randrange, choice
+
+from vivado_utils import get_project_src_dir
 
 parser = argparse.ArgumentParser(
     prog="Test bench generator",
@@ -424,11 +425,13 @@ BEGIN\n\
 \n\
 END projecttb;"
 
+src_dir = get_project_src_dir()
+
 i = 1
-while Path("./serial_to_parallel_ram_dereference.srcs/sim_" + str(i)).exists():
+while src_dir.joinpath(f"./sim_" + str(i)).exists():
     i += 1
 
-file = Path(f"./serial_to_parallel_ram_dereference.srcs/sim_{str(i)}/new/{args.testbench_name}.vhd")
+file = src_dir.joinpath(f"./sim_{str(i)}/new/{args.testbench_name}.vhd")
 
 file.parent.mkdir(parents=True, exist_ok=True)
 with open(file, "w+") as f:
