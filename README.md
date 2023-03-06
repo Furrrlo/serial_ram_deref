@@ -84,7 +84,7 @@ Additional testbenches can be generated using the following script
 
 ```console
 foo@bar:~$ python3 generate_vivado_testbench.py -h
-usage: Test bench generator [-h] [-i N] [-z] [-a] [-r] [-m] testbench_name
+usage: Test bench generator [-h] [-i N] [-z] [-a] [-r P] [-m] testbench_name
 
 Generates random tests with a certain number of iterations
 
@@ -99,7 +99,7 @@ optional arguments:
                         (start = 2 clock cycles)
   -a, --full_address    If flagged forces a testcase with 1 as address
                         (start = 18 clock cycles)
-  -r, --multiple_resets
+  -r P, --multiple_resets P
                         Probability that a reset will be inserted during 
                         processing, 0 if left empty.
   -m, --use_example_memory

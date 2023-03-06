@@ -17,6 +17,18 @@ except NotImplementedError:
     import time
     seed = int(time.time() * 256)
 
+
+def restricted_float(x):
+    try:
+        x = float(x)
+    except ValueError:
+        raise argparse.ArgumentTypeError("%r not a floating-point literal" % (x,))
+
+    if x < 0.0 or x > 1.0:
+        raise argparse.ArgumentTypeError("%r not in range [0.0, 1.0]" % (x,))
+    return x
+
+
 parser.add_argument('testbench_name')
 parser.add_argument('-s', '--seed', metavar="N", help="Sets the random seed used to generate the testbench.",
                     type=int, default=seed)
@@ -26,8 +38,9 @@ parser.add_argument('-z', '--zeros', action='store_true',
                     help="If flagged forces a testcase with 0 as address (start = 2 clock cycles)")
 parser.add_argument('-a', '--full_address', action='store_true',
                     help="If flagged forces a testcase with 1 as address (start = 18 clock cycles)")
-parser.add_argument('-r', '--multiple_resets', help="Probability that a reset will be inserted during processing",
-                    type=float, default=0)
+parser.add_argument('-r', '--multiple_resets', metavar="P",
+                    help="Probability that a reset will be inserted during processing, 0 if left empty.",
+                    type=restricted_float, default=0)
 parser.add_argument('-m', '--use_example_memory', action='store_true',
                     help="If flagged uses the memory provided in the example testbench")
 
