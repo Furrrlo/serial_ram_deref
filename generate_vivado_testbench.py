@@ -112,7 +112,7 @@ def generate_bit_string(length, val):
 
 def compose_scenarios_and_assertions(num_of_iterations):
     seed_rnd(args.seed)
-    
+
     outputs = {
         "tb_z0": "0",
         "tb_z1": "0",
@@ -159,12 +159,12 @@ def compose_scenarios_and_assertions(num_of_iterations):
 
         rst_in_address_bits = (2 <= rst_idx < len(random_address_binary) + 2)
         rst_in_computation_bits = (len(random_address_binary) + 2 <= rst_idx < (len(random_address_binary) + 22))
-                
-        if rst_idx == 0: # reset at first bit
+
+        if rst_idx == 0:  # reset at first bit
             start += "1"
             rst += "1"
             w += channel[0]
-        elif rst_idx == 1: # reset at second bit
+        elif rst_idx == 1:  # reset at second bit
             start += "11"
             rst += "01"
             w += channel
@@ -178,12 +178,12 @@ def compose_scenarios_and_assertions(num_of_iterations):
             start += "11" + generate_bit_string(len(random_address_binary), "1")
             rst += "00" + generate_bit_string(len(random_address_binary), "0")
             w += channel + random_address_binary
-            
+
             if rst_in_computation_bits:
                 start += generate_bit_string(rst_idx - len(random_address_binary) - 1, "0")
                 rst += generate_bit_string(rst_idx - len(random_address_binary) - 2, "0") + "1"
                 w += generate_bit_string(rst_idx - len(random_address_binary) - 1, "0")
-            else: # No reset
+            else:  # No reset
                 start += generate_bit_string(20, "0")
                 rst += generate_bit_string(20, "0")
                 w += generate_bit_string(20, "0")
@@ -210,7 +210,7 @@ def compose_scenarios_and_assertions(num_of_iterations):
                     assertions += compose_reset_assertion(wait_for_start and rst_idx != 0)
                     wait_for_start = 1
                 wait_for_start = 0 if zeros_after_rst == 0 else wait_for_start
-            
+
             outputs = {
                 "tb_z0": "0",
                 "tb_z1": "0",
@@ -282,7 +282,7 @@ def compose_reset_assertion(wait_for_start):
 
 data = compose_scenarios_and_assertions(args.iterations)
 
-generated_cmd = "-- python3 generate_vivado_testbench.py \\\n";
+generated_cmd = "-- python3 generate_vivado_testbench.py \\\n"
 generated_cmd += f"--    --seed {args.seed} \\\n"
 generated_cmd += f"--    --iterations {args.iterations} \\\n"
 generated_cmd += f"--    --zeros \\\n" if args.zeros else ''
@@ -440,11 +440,11 @@ END projecttb;"
 
 src_dir = get_project_src_dir()
 
-i = 1
-while src_dir.joinpath(f"./sim_" + str(i)).exists():
-    i += 1
+idx = 1
+while src_dir.joinpath(f"./sim_" + str(idx)).exists():
+    idx += 1
 
-file = src_dir.joinpath(f"./sim_{str(i)}/new/{args.testbench_name}.vhd")
+file = src_dir.joinpath(f"./sim_{str(idx)}/new/{args.testbench_name}.vhd")
 
 file.parent.mkdir(parents=True, exist_ok=True)
 with open(file, "w+") as f:
