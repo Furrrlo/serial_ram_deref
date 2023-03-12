@@ -34,6 +34,9 @@ parser.add_argument('-s', '--seed', metavar="N", help="Sets the random seed used
                     type=int, default=seed)
 parser.add_argument('-i', '--iterations', metavar="N", help="Sets the number of iterations, random if left empty.",
                     type=int, default=10)
+parser.add_argument('-c', '--computation_cycles', metavar="L",
+                    help="Sets the number of computation cycles to wait after start goes to 0.",
+                    type=int, default=20)
 parser.add_argument('-z', '--zeros', action='store_true',
                     help="If flagged forces a testcase with 0 as address (start = 2 clock cycles)")
 parser.add_argument('-a', '--full_address', action='store_true',
@@ -184,9 +187,9 @@ def compose_scenarios_and_assertions(num_of_iterations):
                 rst += generate_bit_string(rst_idx - len(random_address_binary) - 2, "0") + "1"
                 w += generate_bit_string(rst_idx - len(random_address_binary) - 1, "0")
             else:  # No reset
-                start += generate_bit_string(20, "0")
-                rst += generate_bit_string(20, "0")
-                w += generate_bit_string(20, "0")
+                start += generate_bit_string(args.computation_cycles, "0")
+                rst += generate_bit_string(args.computation_cycles, "0")
+                w += generate_bit_string(args.computation_cycles, "0")
 
         did_add_rst = (rst[-1] == "1")
         zero_before_rst = (rst[-2] == "0")
@@ -285,6 +288,7 @@ data = compose_scenarios_and_assertions(args.iterations)
 generated_cmd = "-- python3 generate_vivado_testbench.py \\\n"
 generated_cmd += f"--    --seed {args.seed} \\\n"
 generated_cmd += f"--    --iterations {args.iterations} \\\n"
+generated_cmd += f"--    --computation_cycles {args.computation_cycles} \\\n"
 generated_cmd += f"--    --zeros \\\n" if args.zeros else ''
 generated_cmd += f"--    --full_address \\\n" if args.full_address else ''
 generated_cmd += f"--    --multiple_resets {args.multiple_resets} \\\n"
