@@ -434,7 +434,8 @@ BEGIN\n\
         --VUNIT%% test_runner_cleanup(runner); %%-- \n\
     END PROCESS testRoutine;\n\
 \n\
-    --VUNIT%% test_runner_watchdog(runner, CLOCK_PERIOD * SCENARIOLENGTH); %%-- \n\
+    -- One additional clock cycle for the testbench to check the last assertions \n\
+    --VUNIT%% test_runner_watchdog(runner, CLOCK_PERIOD * (SCENARIOLENGTH + 1)); %%-- \n\
 \n\
 END projecttb;"
 
