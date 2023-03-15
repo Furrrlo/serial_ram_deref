@@ -1,0 +1,260 @@
+#-----------------------------------------------------------
+# Vivado v2022.2 (64-bit)
+# SW Build 3671981 on Fri Oct 14 05:00:03 MDT 2022
+# IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
+# Start of session at: Wed Mar 15 16:20:28 2023
+# Process ID: 13544
+# Current directory: C:/Users/giaco/Desktop/serial_to_parallel_ram_dereference/serial_to_parallel_ram_dereference.runs/synth_1
+# Command line: vivado.exe -log project_reti_logiche.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source project_reti_logiche.tcl
+# Log file: C:/Users/giaco/Desktop/serial_to_parallel_ram_dereference/serial_to_parallel_ram_dereference.runs/synth_1/project_reti_logiche.vds
+# Journal file: C:/Users/giaco/Desktop/serial_to_parallel_ram_dereference/serial_to_parallel_ram_dereference.runs/synth_1\vivado.jou
+# Running On: FISSO, OS: Windows, CPU Frequency: 3600 MHz, CPU Physical cores: 4, Host memory: 8548 MB
+#-----------------------------------------------------------
+source project_reti_logiche.tcl -notrace
+create_project: Time (s): cpu = 00:00:05 ; elapsed = 00:00:07 . Memory (MB): peak = 393.621 ; gain = 61.016
+Command: read_checkpoint -auto_incremental -incremental C:/Users/giaco/Desktop/serial_to_parallel_ram_dereference/serial_to_parallel_ram_dereference.srcs/utils_1/imports/synth_1/project_reti_logiche.dcp
+INFO: [Vivado 12-5825] Read reference checkpoint from C:/Users/giaco/Desktop/serial_to_parallel_ram_dereference/serial_to_parallel_ram_dereference.srcs/utils_1/imports/synth_1/project_reti_logiche.dcp for incremental synthesis
+INFO: [Vivado 12-7989] Please ensure there are no constraint changes
+Command: synth_design -top project_reti_logiche -part xc7a200tfbg484-1
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7a200t'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7a200t'
+INFO: [Device 21-403] Loading part xc7a200tfbg484-1
+INFO: [Designutils 20-5440] No compile time benefit to using incremental synthesis; A full resynthesis will be run
+INFO: [Designutils 20-4379] Flow is switching to default flow due to incremental criteria not met. If you would like to alter this behaviour and have the flow terminate instead, please set the following parameter config_implementation {autoIncr.Synth.RejectBehavior Terminate}
+INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
+INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
+INFO: [Synth 8-7075] Helper process launched with PID 16932
+INFO: [Synth 8-11241] undeclared symbol 'REGCCE', assumed default net type 'wire' [D:/Xilinx/Vivado/2022.2/data/verilog/src/unimacro/BRAM_SINGLE_MACRO.v:2170]
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:00:06 ; elapsed = 00:00:08 . Memory (MB): peak = 1261.207 ; gain = 411.598
+---------------------------------------------------------------------------------
+INFO: [Synth 8-638] synthesizing module 'project_reti_logiche' [C:/Users/giaco/Desktop/serial_to_parallel_ram_dereference/serial_to_parallel_ram_dereference.srcs/sources_1/new/main.vhd:42]
+INFO: [Synth 8-3491] module 'datapath' declared at 'C:/Users/giaco/Desktop/serial_to_parallel_ram_dereference/serial_to_parallel_ram_dereference.srcs/sources_1/new/main.vhd:142' bound to instance 'DATAPATH0' of component 'datapath' [C:/Users/giaco/Desktop/serial_to_parallel_ram_dereference/serial_to_parallel_ram_dereference.srcs/sources_1/new/main.vhd:70]
+INFO: [Synth 8-638] synthesizing module 'datapath' [C:/Users/giaco/Desktop/serial_to_parallel_ram_dereference/serial_to_parallel_ram_dereference.srcs/sources_1/new/main.vhd:159]
+INFO: [Synth 8-3491] module 'serial_to_parallel_16' declared at 'C:/Users/giaco/Desktop/serial_to_parallel_ram_dereference/serial_to_parallel_ram_dereference.srcs/sources_1/new/main.vhd:257' bound to instance 'SERIAL_TO_PARALLEL_ADDR' of component 'serial_to_parallel_16' [C:/Users/giaco/Desktop/serial_to_parallel_ram_dereference/serial_to_parallel_ram_dereference.srcs/sources_1/new/main.vhd:202]
+INFO: [Synth 8-638] synthesizing module 'serial_to_parallel_16' [C:/Users/giaco/Desktop/serial_to_parallel_ram_dereference/serial_to_parallel_ram_dereference.srcs/sources_1/new/main.vhd:266]
+INFO: [Synth 8-256] done synthesizing module 'serial_to_parallel_16' (0#1) [C:/Users/giaco/Desktop/serial_to_parallel_ram_dereference/serial_to_parallel_ram_dereference.srcs/sources_1/new/main.vhd:266]
+INFO: [Synth 8-3491] module 'serial_to_parallel_2' declared at 'C:/Users/giaco/Desktop/serial_to_parallel_ram_dereference/serial_to_parallel_ram_dereference.srcs/sources_1/new/main.vhd:329' bound to instance 'SERIAL_TO_PARALLEL_EXIT' of component 'serial_to_parallel_2' [C:/Users/giaco/Desktop/serial_to_parallel_ram_dereference/serial_to_parallel_ram_dereference.srcs/sources_1/new/main.vhd:210]
+INFO: [Synth 8-638] synthesizing module 'serial_to_parallel_2' [C:/Users/giaco/Desktop/serial_to_parallel_ram_dereference/serial_to_parallel_ram_dereference.srcs/sources_1/new/main.vhd:337]
+INFO: [Synth 8-256] done synthesizing module 'serial_to_parallel_2' (0#1) [C:/Users/giaco/Desktop/serial_to_parallel_ram_dereference/serial_to_parallel_ram_dereference.srcs/sources_1/new/main.vhd:337]
+INFO: [Synth 8-3491] module 'out_reg' declared at 'C:/Users/giaco/Desktop/serial_to_parallel_ram_dereference/serial_to_parallel_ram_dereference.srcs/sources_1/new/main.vhd:356' bound to instance 'ZO_REG' of component 'out_reg' [C:/Users/giaco/Desktop/serial_to_parallel_ram_dereference/serial_to_parallel_ram_dereference.srcs/sources_1/new/main.vhd:217]
+INFO: [Synth 8-638] synthesizing module 'out_reg' [C:/Users/giaco/Desktop/serial_to_parallel_ram_dereference/serial_to_parallel_ram_dereference.srcs/sources_1/new/main.vhd:366]
+INFO: [Synth 8-256] done synthesizing module 'out_reg' (0#1) [C:/Users/giaco/Desktop/serial_to_parallel_ram_dereference/serial_to_parallel_ram_dereference.srcs/sources_1/new/main.vhd:366]
+INFO: [Synth 8-3491] module 'out_reg' declared at 'C:/Users/giaco/Desktop/serial_to_parallel_ram_dereference/serial_to_parallel_ram_dereference.srcs/sources_1/new/main.vhd:356' bound to instance 'Z1_REG' of component 'out_reg' [C:/Users/giaco/Desktop/serial_to_parallel_ram_dereference/serial_to_parallel_ram_dereference.srcs/sources_1/new/main.vhd:226]
+INFO: [Synth 8-3491] module 'out_reg' declared at 'C:/Users/giaco/Desktop/serial_to_parallel_ram_dereference/serial_to_parallel_ram_dereference.srcs/sources_1/new/main.vhd:356' bound to instance 'Z2_REG' of component 'out_reg' [C:/Users/giaco/Desktop/serial_to_parallel_ram_dereference/serial_to_parallel_ram_dereference.srcs/sources_1/new/main.vhd:235]
+INFO: [Synth 8-3491] module 'out_reg' declared at 'C:/Users/giaco/Desktop/serial_to_parallel_ram_dereference/serial_to_parallel_ram_dereference.srcs/sources_1/new/main.vhd:356' bound to instance 'Z3_REG' of component 'out_reg' [C:/Users/giaco/Desktop/serial_to_parallel_ram_dereference/serial_to_parallel_ram_dereference.srcs/sources_1/new/main.vhd:244]
+INFO: [Synth 8-256] done synthesizing module 'datapath' (0#1) [C:/Users/giaco/Desktop/serial_to_parallel_ram_dereference/serial_to_parallel_ram_dereference.srcs/sources_1/new/main.vhd:159]
+INFO: [Synth 8-256] done synthesizing module 'project_reti_logiche' (0#1) [C:/Users/giaco/Desktop/serial_to_parallel_ram_dereference/serial_to_parallel_ram_dereference.srcs/sources_1/new/main.vhd:42]
+WARNING: [Synth 8-3917] design project_reti_logiche has port o_mem_we driven by constant 0
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:00:07 ; elapsed = 00:00:10 . Memory (MB): peak = 1350.168 ; gain = 500.559
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:07 ; elapsed = 00:00:10 . Memory (MB): peak = 1350.168 ; gain = 500.559
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:07 ; elapsed = 00:00:10 . Memory (MB): peak = 1350.168 ; gain = 500.559
+---------------------------------------------------------------------------------
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 1350.168 ; gain = 0.000
+INFO: [Project 1-570] Preparing netlist for logic optimization
+
+Processing XDC Constraints
+Initializing timing engine
+Parsing XDC File [C:/Users/giaco/Desktop/serial_to_parallel_ram_dereference/serial_to_parallel_ram_dereference.srcs/constrs_1/new/clock.xdc]
+Finished Parsing XDC File [C:/Users/giaco/Desktop/serial_to_parallel_ram_dereference/serial_to_parallel_ram_dereference.srcs/constrs_1/new/clock.xdc]
+Completed Processing XDC Constraints
+
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1418.551 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.037 . Memory (MB): peak = 1418.551 ; gain = 0.000
+INFO: [Designutils 20-5440] No compile time benefit to using incremental synthesis; A full resynthesis will be run
+INFO: [Designutils 20-4379] Flow is switching to default flow due to incremental criteria not met. If you would like to alter this behaviour and have the flow terminate instead, please set the following parameter config_implementation {autoIncr.Synth.RejectBehavior Terminate}
+INFO: [Synth 8-11241] undeclared symbol 'REGCCE', assumed default net type 'wire' [D:/Xilinx/Vivado/2022.2/data/verilog/src/unimacro/BRAM_SINGLE_MACRO.v:2170]
+---------------------------------------------------------------------------------
+Finished Constraint Validation : Time (s): cpu = 00:00:17 ; elapsed = 00:00:20 . Memory (MB): peak = 1418.551 ; gain = 568.941
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Loading Part and Timing Information
+---------------------------------------------------------------------------------
+Loading part: xc7a200tfbg484-1
+---------------------------------------------------------------------------------
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:17 ; elapsed = 00:00:20 . Memory (MB): peak = 1418.551 ; gain = 568.941
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying 'set_property' XDC Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:17 ; elapsed = 00:00:20 . Memory (MB): peak = 1418.551 ; gain = 568.941
+---------------------------------------------------------------------------------
+INFO: [Synth 8-802] inferred FSM for state register 'curr_state_reg' in module 'project_reti_logiche'
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+                      s0 |                              000 |                              000
+                      s1 |                              001 |                              001
+                      s2 |                              010 |                              010
+                      s3 |                              011 |                              011
+                      s4 |                              100 |                              100
+                      s5 |                              101 |                              101
+                      s6 |                              110 |                              110
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'curr_state_reg' using encoding 'sequential' in module 'project_reti_logiche'
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:17 ; elapsed = 00:00:20 . Memory (MB): peak = 1418.551 ; gain = 568.941
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start RTL Component Statistics 
+---------------------------------------------------------------------------------
+Detailed RTL Component Info : 
++---Registers : 
+	                8 Bit    Registers := 4     
+	                1 Bit    Registers := 19    
++---Muxes : 
+	   2 Input    8 Bit        Muxes := 4     
+	   7 Input    3 Bit        Muxes := 1     
+	   2 Input    3 Bit        Muxes := 1     
+	   7 Input    1 Bit        Muxes := 6     
+---------------------------------------------------------------------------------
+Finished RTL Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Part Resource Summary
+---------------------------------------------------------------------------------
+Part Resources:
+DSPs: 740 (col length:100)
+BRAMs: 730 (col length: RAMB18 100 RAMB36 50)
+---------------------------------------------------------------------------------
+Finished Part Resource Summary
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Cross Boundary and Area Optimization
+---------------------------------------------------------------------------------
+WARNING: [Synth 8-7080] Parallel synthesis criteria is not met
+WARNING: [Synth 8-3917] design project_reti_logiche has port o_mem_we driven by constant 0
+---------------------------------------------------------------------------------
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:19 ; elapsed = 00:00:23 . Memory (MB): peak = 1418.551 ; gain = 568.941
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying XDC Timing Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:25 ; elapsed = 00:00:30 . Memory (MB): peak = 1418.551 ; gain = 568.941
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Timing Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Timing Optimization : Time (s): cpu = 00:00:25 ; elapsed = 00:00:31 . Memory (MB): peak = 1418.551 ; gain = 568.941
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Technology Mapping
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Technology Mapping : Time (s): cpu = 00:00:25 ; elapsed = 00:00:31 . Memory (MB): peak = 1418.551 ; gain = 568.941
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished IO Insertion : Time (s): cpu = 00:00:30 ; elapsed = 00:00:36 . Memory (MB): peak = 1418.551 ; gain = 568.941
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Instances
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:30 ; elapsed = 00:00:36 . Memory (MB): peak = 1418.551 ; gain = 568.941
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Rebuilding User Hierarchy
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:30 ; elapsed = 00:00:36 . Memory (MB): peak = 1418.551 ; gain = 568.941
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Ports
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:30 ; elapsed = 00:00:36 . Memory (MB): peak = 1418.551 ; gain = 568.941
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:30 ; elapsed = 00:00:36 . Memory (MB): peak = 1418.551 ; gain = 568.941
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Nets
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:30 ; elapsed = 00:00:36 . Memory (MB): peak = 1418.551 ; gain = 568.941
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Writing Synthesis Report
+---------------------------------------------------------------------------------
+
+Report BlackBoxes: 
++-+--------------+----------+
+| |BlackBox name |Instances |
++-+--------------+----------+
++-+--------------+----------+
+
+Report Cell Usage: 
++------+-----+------+
+|      |Cell |Count |
++------+-----+------+
+|1     |BUFG |     1|
+|2     |LUT3 |     3|
+|3     |LUT4 |    37|
+|4     |LUT5 |     6|
+|5     |FDCE |    51|
+|6     |FDRE |     3|
+|7     |IBUF |    12|
+|8     |OBUF |    51|
++------+-----+------+
+---------------------------------------------------------------------------------
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:30 ; elapsed = 00:00:36 . Memory (MB): peak = 1418.551 ; gain = 568.941
+---------------------------------------------------------------------------------
+Synthesis finished with 0 errors, 0 critical warnings and 2 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:20 ; elapsed = 00:00:33 . Memory (MB): peak = 1418.551 ; gain = 500.559
+Synthesis Optimization Complete : Time (s): cpu = 00:00:30 ; elapsed = 00:00:36 . Memory (MB): peak = 1418.551 ; gain = 568.941
+INFO: [Project 1-571] Translating synthesized netlist
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.002 . Memory (MB): peak = 1418.551 ; gain = 0.000
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1418.551 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+Synth Design complete, checksum: 489b623d
+INFO: [Common 17-83] Releasing license: Synthesis
+39 Infos, 3 Warnings, 0 Critical Warnings and 0 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:00:35 ; elapsed = 00:00:44 . Memory (MB): peak = 1418.551 ; gain = 1000.059
+INFO: [Common 17-1381] The checkpoint 'C:/Users/giaco/Desktop/serial_to_parallel_ram_dereference/serial_to_parallel_ram_dereference.runs/synth_1/project_reti_logiche.dcp' has been generated.
+write_checkpoint: Time (s): cpu = 00:00:01 ; elapsed = 00:00:05 . Memory (MB): peak = 1418.551 ; gain = 0.000
+INFO: [runtcl-4] Executing : report_utilization -file synth_report_utilization_0.rpt -pb synth_report_utilization_0.pb
+INFO: [runtcl-4] Executing : report_timing -file synth_report_timing_0.rpt -rpx synth_report_timing_0.rpx
+INFO: [Timing 38-91] UpdateTimingParams: Speed grade: -1, Delay Type: max.
+INFO: [Timing 38-191] Multithreading enabled for timing update using a maximum of 2 CPUs
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+INFO: [Timing 38-78] ReportTimingParams: -max_paths 1 -nworst 1 -delay_type max -sort_by slack.
+report_timing: Time (s): cpu = 00:00:03 ; elapsed = 00:00:06 . Memory (MB): peak = 1661.355 ; gain = 242.805
+INFO: [Common 17-206] Exiting Vivado at Wed Mar 15 16:21:37 2023...

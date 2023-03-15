@@ -1,0 +1,67 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2022.2 (win64) Build 3671981 Fri Oct 14 05:00:03 MDT 2022
+| Date         : Wed Mar 15 16:09:00 2023
+| Host         : FISSO running 64-bit major release  (build 9200)
+| Command      : report_timing -file synth_report_timing.rpt
+| Design       : project_reti_logiche
+| Device       : 7a200t-fbg484
+| Speed File   : -1  PRODUCTION 1.23 2018-06-13
+------------------------------------------------------------------------------------------
+
+Timing Report
+
+Slack (MET) :             97.009ns  (required time - arrival time)
+  Source:                 FSM_sequential_curr_state_reg[1]/C
+                            (rising edge-triggered cell FDCE clocked by clock  {rise@0.000ns fall@5.000ns period=100.000ns})
+  Destination:            DATAPATH0/SERIAL_TO_PARALLEL_ADDR/q0_reg/CLR
+                            (recovery check against rising-edge clock clock  {rise@0.000ns fall@5.000ns period=100.000ns})
+  Path Group:             **async_default**
+  Path Type:              Recovery (Max at Slow Process Corner)
+  Requirement:            100.000ns  (clock rise@100.000ns - clock rise@0.000ns)
+  Data Path Delay:        2.402ns  (logic 0.751ns (31.266%)  route 1.651ns (68.734%))
+  Logic Levels:           1  (LUT4=1)
+  Clock Path Skew:        -0.145ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.100ns = ( 102.100 - 100.000 ) 
+    Source Clock Delay      (SCD):    2.424ns
+    Clock Pessimism Removal (CPR):    0.178ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clock rise edge)      0.000     0.000 r  
+                                                      0.000     0.000 r  i_clk (IN)
+                         net (fo=0)                   0.000     0.000    i_clk
+                         IBUF (Prop_ibuf_I_O)         0.944     0.944 r  i_clk_IBUF_inst/O
+                         net (fo=1, unplaced)         0.800     1.744    i_clk_IBUF
+                         BUFG (Prop_bufg_I_O)         0.096     1.840 r  i_clk_IBUF_BUFG_inst/O
+                         net (fo=54, unplaced)        0.584     2.424    i_clk_IBUF_BUFG
+                         FDCE                                         r  FSM_sequential_curr_state_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+                         FDCE (Prop_fdce_C_Q)         0.456     2.880 f  FSM_sequential_curr_state_reg[1]/Q
+                         net (fo=46, unplaced)        0.821     3.701    DATAPATH0/SERIAL_TO_PARALLEL_ADDR/Q[1]
+                         LUT4 (Prop_lut4_I1_O)        0.295     3.996 f  DATAPATH0/SERIAL_TO_PARALLEL_ADDR/q0_i_2/O
+                         net (fo=16, unplaced)        0.830     4.826    DATAPATH0/SERIAL_TO_PARALLEL_ADDR/q0_i_2_n_0
+                         FDCE                                         f  DATAPATH0/SERIAL_TO_PARALLEL_ADDR/q0_reg/CLR
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clock rise edge)    100.000   100.000 r  
+                                                      0.000   100.000 r  i_clk (IN)
+                         net (fo=0)                   0.000   100.000    i_clk
+                         IBUF (Prop_ibuf_I_O)         0.811   100.811 r  i_clk_IBUF_inst/O
+                         net (fo=1, unplaced)         0.760   101.570    i_clk_IBUF
+                         BUFG (Prop_bufg_I_O)         0.091   101.661 r  i_clk_IBUF_BUFG_inst/O
+                         net (fo=54, unplaced)        0.439   102.100    DATAPATH0/SERIAL_TO_PARALLEL_ADDR/i_clk_IBUF_BUFG
+                         FDCE                                         r  DATAPATH0/SERIAL_TO_PARALLEL_ADDR/q0_reg/C
+                         clock pessimism              0.178   102.279    
+                         clock uncertainty           -0.035   102.243    
+                         FDCE (Recov_fdce_C_CLR)     -0.409   101.834    DATAPATH0/SERIAL_TO_PARALLEL_ADDR/q0_reg
+  -------------------------------------------------------------------
+                         required time                        101.834    
+                         arrival time                          -4.826    
+  -------------------------------------------------------------------
+                         slack                                 97.009    
