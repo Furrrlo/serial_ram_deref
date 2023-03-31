@@ -1,21 +1,10 @@
 ----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
+-- Company: Politecnico di Milano
+-- Authors: Francesco Ferlin e Giacomo Orsenigo
 -- 
 -- Create Date: 19.02.2023 18:30:52
--- Design Name: 
--- Module Name: project_reti_logiche - Behavioral
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
--- 
--- Dependencies: 
--- 
--- Revision:
--- Revision 0.01 - File Created
--- Additional Comments:
--- 
+-- Module Name: project_reti_logiche
+-- Project Name: Prova Finale - Progetto di Reti Logiche 2022/2023
 ----------------------------------------------------------------------------------
 
 
