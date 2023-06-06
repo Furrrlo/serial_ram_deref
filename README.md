@@ -1,6 +1,9 @@
 Computer engineering project for the course "Digital logic design" at Politecnico di Milano, Academic Year 2022/2023
 
-See [the specification](./docs/PFRL_Specifica_22_23_V0.0.pdf) and the [rules](./docs/PFRL_Regole_22_23_V0.0.pdf).
+Grade: 30/30.
+
+See [the specification](./docs/PFRL_Specifica_22_23_V0.0.pdf), the [rules](./docs/PFRL_Regole_22_23_V0.0.pdf) 
+and [our final project report](./docs/final-report.pdf)
 
 Datapath design:
 ![datapath](./docs/datapath.svg)
